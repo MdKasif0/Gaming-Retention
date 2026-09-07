@@ -5,7 +5,6 @@ import nbformat as nbf
 from nbformat.v4 import new_notebook, new_markdown_cell, new_code_cell
 from nbclient import NotebookClient
 
-# Ensure directories exist
 Path("models").mkdir(parents=True, exist_ok=True)
 Path("outputs").mkdir(parents=True, exist_ok=True)
 
@@ -167,6 +166,7 @@ f1_atrisk = f1_score(y_test, y_pred, pos_label=0)
 # Macro and weighted averages
 f1_macro = f1_score(y_test, y_pred, average='macro')
 f1_weighted = f1_score(y_test, y_pred, average='weighted')
+avg_prec = average_precision_score(y_test, y_proba)
 
 evaluation_table = pd.DataFrame({
     'Metric': ['Accuracy', 'Precision', 'Recall', 'F1 Score', 'ROC-AUC'],
@@ -192,10 +192,10 @@ cells.append(new_code_cell(c6))
 # Cell 7: Markdown Confusion Matrix
 c7 = r"""### 3. Confusion Matrix Diagnostic
 Examining the precise distribution of True Positives, True Negatives, False Positives, and False Negatives:
-- **Actual At Risk $\rightarrow$ Predicted At Risk (True Negative for Retained / Correct Alarm):** Correctly detected churn risk.
-- **Actual At Risk $\rightarrow$ Predicted Retained (False Positive for Retained / Missed Churner):** Fatal error where at-risk player goes unnoticed.
-- **Actual Retained $\rightarrow$ Predicted At Risk (False Negative for Retained / False Alarm):** Safe error where retained player receives a bonus offer.
-- **Actual Retained $\rightarrow$ Predicted Retained (True Positive for Retained):** Correctly identified active player."""
+- **Actual At Risk $\rightarrow$ Predicted At Risk:** Correctly detected churn risk ($1,861$ players).
+- **Actual At Risk $\rightarrow$ Predicted Retained:** Missed at-risk player ($204$ players).
+- **Actual Retained $\rightarrow$ Predicted At Risk:** False alarm ($227$ players).
+- **Actual Retained $\rightarrow$ Predicted Retained:** Correctly identified active player ($5,715$ players)."""
 cells.append(new_markdown_cell(c7))
 
 # Cell 8: Code Confusion Matrix
@@ -203,28 +203,26 @@ c8 = r"""# =====================================================================
 # 3. CONFUSION MATRIX VISUALIZATION
 # ==============================================================================
 cm = confusion_matrix(y_test, y_pred)
-
-# Matrix breakdown
 tn, fp, fn, tp = cm.ravel()
 
 fig, ax = plt.subplots(figsize=(7, 6))
 
 annot_labels = [
-    [f"True At Risk\n{tn:,}\n({tn/(tn+fp)*100:.1f}%)", f"Missed At Risk\n{fp:,}\n({fp/(tn+fp)*100:.1f}%)"],
-    [f"False Alarm\n{fn:,}\n({fn/(fn+tp)*100:.1f}%)", f"True Retained\n{tp:,}\n({tp/(fn+tp)*100:.1f}%)"]
+    [f"Actual At Risk\nPredicted At Risk\n{tn:,} ({tn/(tn+fp)*100:.1f}%)", f"Actual At Risk\nPredicted Retained\n{fp:,} ({fp/(tn+fp)*100:.1f}%)"],
+    [f"Actual Retained\nPredicted At Risk\n{fn:,} ({fn/(fn+tp)*100:.1f}%)", f"Actual Retained\nPredicted Retained\n{tp:,} ({tp/(fn+tp)*100:.1f}%)"]
 ]
 
 sns.heatmap(
     cm, annot=annot_labels, fmt="", cmap="Blues", cbar=False,
     xticklabels=["Predicted At Risk", "Predicted Retained"],
     yticklabels=["Actual At Risk", "Actual Retained"],
-    annot_kws={"size": 13, "weight": "bold"}, ax=ax,
+    annot_kws={"size": 11, "weight": "bold"}, ax=ax,
     linewidths=1.5, linecolor='white'
 )
 
-ax.set_title("Gaming Retention Holdout Confusion Matrix", fontsize=14, weight='bold', pad=15)
-ax.set_xlabel("Predicted Retention Status", weight='semibold', fontsize=12)
-ax.set_ylabel("Actual Retention Status", weight='semibold', fontsize=12)
+ax.set_title("Gaming Player Retention Confusion Matrix", fontsize=14, weight='bold', pad=15)
+ax.set_xlabel("Predicted Label", weight='semibold', fontsize=12)
+ax.set_ylabel("Actual Label", weight='semibold', fontsize=12)
 
 plt.tight_layout()
 cm_fig_path = OUTPUTS_DIR / "confusion_matrix.png"
@@ -235,8 +233,8 @@ cells.append(new_code_cell(c8))
 
 # Cell 9: Markdown ROC & PR Curves
 c9 = r"""### 4. ROC Curve & Precision-Recall Diagnostic Curves
-- **ROC Curve:** Measures sensitivity against false positive rate across classification thresholds (Area = $0.9430$).
-- **Precision-Recall Curve:** Essential for imbalanced domains, demonstrating sustained high precision ($>90\%$) across high recall rates."""
+- **ROC Curve:** Measures discrimination sensitivity across all classification thresholds ($\text{AUC} = 0.9430$).
+- **Precision-Recall Curve:** Demonstrates sustained high precision ($>96\%$) across high recall rates for the retained cohort."""
 cells.append(new_markdown_cell(c9))
 
 # Cell 10: Code ROC & PR Curves
@@ -245,7 +243,6 @@ c10 = r"""# ====================================================================
 # ==============================================================================
 fpr, tpr, _ = roc_curve(y_test, y_proba)
 precision_pts, recall_pts, _ = precision_recall_curve(y_test, y_proba)
-avg_prec = average_precision_score(y_test, y_proba)
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5.5))
 
@@ -373,76 +370,78 @@ plt.show()
 print(f"📊 Saved: {feat_chart_path}")"""
 cells.append(new_code_cell(c12))
 
-# Cell 13: Markdown Evaluation Report Generation
+# Cell 13: Markdown Export Report
 c13 = r"""### 6. Exporting Formal Evaluation Text Report (`/outputs/model_evaluation.txt`)
-Saving the structured text report containing all metrics, confusion matrix counts, and analytical summaries."""
+Writing all calculated metrics, confusion matrix counts, top predictors, and academic conclusions to a permanent text report."""
 cells.append(new_markdown_cell(c13))
 
-# Cell 14: Code Exporting Report
+# Cell 14: Code Export Report
 c14 = r"""# ==============================================================================
 # 6. EXPORT FORMAL EVALUATION REPORT
 # ==============================================================================
 report_path = OUTPUTS_DIR / "model_evaluation.txt"
 
-report_content = f"""================================================================================
-AI-BASED ONLINE GAMING PLAYER RETENTION PREDICTION USING RANDOM FOREST
-PHASE 4: COMPREHENSIVE MODEL EVALUATION & SCIENTIFIC AUDIT REPORT
-================================================================================
-Generated Timestamp : {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}
-Evaluated Model     : RandomForestClassifier (150 trees, class_weight='balanced')
-Holdout Test Size   : {len(X_test):,} players (20.0% stratified split)
+lines = [
+    "=" * 80,
+    "AI-BASED ONLINE GAMING PLAYER RETENTION PREDICTION USING RANDOM FOREST",
+    "PHASE 4: COMPREHENSIVE MODEL EVALUATION & SCIENTIFIC AUDIT REPORT",
+    "=" * 80,
+    f"Generated Timestamp : {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}",
+    "Evaluated Model     : RandomForestClassifier (150 trees, class_weight='balanced')",
+    f"Holdout Test Size   : {len(X_test):,} players (20.0% stratified split)",
+    "",
+    "-" * 80,
+    "1. FINAL EVALUATION TABLE",
+    "-" * 80,
+    evaluation_table.to_string(index=False),
+    "",
+    f"Additional Metrics:",
+    f"• Macro F1-Score       : {f1_macro:.4f}",
+    f"• Weighted F1-Score    : {f1_weighted:.4f}",
+    f"• Average Precision PR : {avg_prec:.4f}",
+    "",
+    "-" * 80,
+    "2. CLASS-SPECIFIC PERFORMANCE",
+    "-" * 80,
+    "Cohort 0: At Risk (Churn Hazard)",
+    f"  • Precision : {prec_atrisk:.4f} ({prec_atrisk*100:.2f}%)",
+    f"  • Recall    : {rec_atrisk:.4f} ({rec_atrisk*100:.2f}%) [1,861 / 2,065 correctly intercepted]",
+    f"  • F1-Score  : {f1_atrisk:.4f}",
+    "",
+    "Cohort 1: Retained (Active Core Base)",
+    f"  • Precision : {prec_retained:.4f} ({prec_retained*100:.2f}%)",
+    f"  • Recall    : {rec_retained:.4f} ({rec_retained*100:.2f}%) [5,715 / 5,942 correctly identified]",
+    f"  • F1-Score  : {f1_retained:.4f}",
+    "",
+    "-" * 80,
+    "3. CONFUSION MATRIX (COUNTS & PROPORTIONS)",
+    "-" * 80,
+    f"Actual At Risk   | Predicted At Risk: {tn:,} ({tn/(tn+fp)*100:.1f}%) | Predicted Retained: {fp:,} ({fp/(tn+fp)*100:.1f}%)",
+    f"Actual Retained  | Predicted At Risk: {fn:,} ({fn/(fn+tp)*100:.1f}%) | Predicted Retained: {tp:,} ({tp/(fn+tp)*100:.1f}%)",
+    "",
+    "-" * 80,
+    "4. TOP 5 PREDICTIVE BEHAVIORAL FACTORS (AGGREGATED GINI IMPORTANCE)",
+    "-" * 80
+]
 
---------------------------------------------------------------------------------
-1. FINAL METRIC SUMMARY TABLE
---------------------------------------------------------------------------------
-{evaluation_table.to_string(index=False)}
+for idx, row in agg_feat_df.head(5).iterrows():
+    lines.append(f"{idx+1}. {row['Original_Feature']:<25} : {row['Aggregated_Importance']*100:.2f}%")
 
-Additional Macro & Weighted Metrics:
-- Macro F1-Score       : {f1_macro:.4f}
-- Weighted F1-Score    : {f1_weighted:.4f}
-- Average Precision PR : {avg_prec:.4f}
-
---------------------------------------------------------------------------------
-2. CLASS-SPECIFIC PERFORMANCE
---------------------------------------------------------------------------------
-Cohort 0: At Risk (Churn Hazard)
-  • Precision : {prec_atrisk:.4f} ({prec_atrisk*100:.2f}%)
-  • Recall    : {rec_atrisk:.4f} ({rec_atrisk*100:.2f}%) [1,861 / 2,065 correctly flagged]
-  • F1-Score  : {f1_atrisk:.4f}
-
-Cohort 1: Retained (Active Core Base)
-  • Precision : {prec_retained:.4f} ({prec_retained*100:.2f}%)
-  • Recall    : {rec_retained:.4f} ({rec_retained*100:.2f}%) [5,715 / 5,942 correctly flagged]
-  • F1-Score  : {f1_retained:.4f}
-
---------------------------------------------------------------------------------
-3. CONFUSION MATRIX (COUNTS & PROPORTIONS)
---------------------------------------------------------------------------------
-Actual At Risk   | Predicted At Risk: {tn:,} ({tn/(tn+fp)*100:.1f}%) | Predicted Retained: {fp:,} ({fp/(tn+fp)*100:.1f}%)
-Actual Retained  | Predicted At Risk: {fn:,} ({fn/(fn+tp)*100:.1f}%) | Predicted Retained: {tp:,} ({tp/(fn+tp)*100:.1f}%)
-
---------------------------------------------------------------------------------
-4. TOP 5 PREDICTIVE BEHAVIORAL FACTORS (AGGREGATED GINI IMPORTANCE)
---------------------------------------------------------------------------------
-1. SessionsPerWeek           : {agg_feat_df.loc[agg_feat_df['Original_Feature']=='SessionsPerWeek', 'Aggregated_Importance'].values[0]*100:.2f}%
-2. AvgSessionDurationMinutes : {agg_feat_df.loc[agg_feat_df['Original_Feature']=='AvgSessionDurationMinutes', 'Aggregated_Importance'].values[0]*100:.2f}%
-3. PlayerLevel               : {agg_feat_df.loc[agg_feat_df['Original_Feature']=='PlayerLevel', 'Aggregated_Importance'].values[0]*100:.2f}%
-4. AchievementsUnlocked      : {agg_feat_df.loc[agg_feat_df['Original_Feature']=='AchievementsUnlocked', 'Aggregated_Importance'].values[0]*100:.2f}%
-5. PlayTimeHours             : {agg_feat_df.loc[agg_feat_df['Original_Feature']=='PlayTimeHours', 'Aggregated_Importance'].values[0]*100:.2f}%
-
---------------------------------------------------------------------------------
-5. SCIENTIFIC & METHODOLOGICAL DISCLAIMERS (VIVA DEFENSE)
---------------------------------------------------------------------------------
-* Operational Definition : Target is an engagement-based proxy (Medium/High = Retained,
-                           Low = At Risk).
-* Churn Limitation       : Not a prospective longitudinal churn model (no D1/D7/D30 timestamps).
-* Primary Utility        : Accurately identifies disengaged players in telemetry streams
-                           for proactive game rebalancing and re-engagement campaigns.
-================================================================================
-"""
+lines.extend([
+    "",
+    "-" * 80,
+    "5. SCIENTIFIC & METHODOLOGICAL DISCLAIMERS (VIVA DEFENSE)",
+    "-" * 80,
+    "* Operational Definition : Target is an engagement-based proxy (Medium/High = Retained,",
+    "                           Low = At Risk).",
+    "* Churn Limitation       : Not a prospective longitudinal churn model (no D1/D7/D30 timestamps).",
+    "* Primary Utility        : Accurately identifies disengaged players in telemetry streams",
+    "                           for proactive game rebalancing and re-engagement campaigns.",
+    "=" * 80
+])
 
 with open(report_path, "w") as f:
-    f.write(report_content)
+    f.write("\n".join(lines))
 
 print(f"✅ Full text evaluation report exported to {report_path}")"""
 cells.append(new_code_cell(c14))

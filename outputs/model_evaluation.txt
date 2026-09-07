@@ -1,0 +1,60 @@
+================================================================================
+AI-BASED ONLINE GAMING PLAYER RETENTION PREDICTION USING RANDOM FOREST
+PHASE 4: COMPREHENSIVE MODEL EVALUATION & SCIENTIFIC AUDIT REPORT
+================================================================================
+Generated Timestamp : 2026-09-07 17:05:41
+Evaluated Model     : RandomForestClassifier (150 trees, class_weight='balanced')
+Holdout Test Size   : 8,007 players (20.0% stratified split)
+
+--------------------------------------------------------------------------------
+1. FINAL EVALUATION TABLE
+--------------------------------------------------------------------------------
+   Metric  Score
+ Accuracy 0.9462
+Precision 0.9655
+   Recall 0.9618
+ F1 Score 0.9637
+  ROC-AUC 0.9430
+
+Additional Metrics:
+• Macro F1-Score       : 0.9299
+• Weighted F1-Score    : 0.9463
+• Average Precision PR : 0.9682
+
+--------------------------------------------------------------------------------
+2. CLASS-SPECIFIC PERFORMANCE
+--------------------------------------------------------------------------------
+Cohort 0: At Risk (Churn Hazard)
+  • Precision : 0.8913 (89.13%)
+  • Recall    : 0.9012 (90.12%) [1,861 / 2,065 correctly intercepted]
+  • F1-Score  : 0.8962
+
+Cohort 1: Retained (Active Core Base)
+  • Precision : 0.9655 (96.55%)
+  • Recall    : 0.9618 (96.18%) [5,715 / 5,942 correctly identified]
+  • F1-Score  : 0.9637
+
+--------------------------------------------------------------------------------
+3. CONFUSION MATRIX (COUNTS & PROPORTIONS)
+--------------------------------------------------------------------------------
+Actual At Risk   | Predicted At Risk: 1,861 (90.1%) | Predicted Retained: 204 (9.9%)
+Actual Retained  | Predicted At Risk: 227 (3.8%) | Predicted Retained: 5,715 (96.2%)
+
+--------------------------------------------------------------------------------
+4. TOP 5 PREDICTIVE BEHAVIORAL FACTORS (AGGREGATED GINI IMPORTANCE)
+--------------------------------------------------------------------------------
+1. SessionsPerWeek           : 42.14%
+2. AvgSessionDurationMinutes : 37.35%
+3. PlayerLevel               : 5.67%
+4. AchievementsUnlocked      : 5.16%
+5. PlayTimeHours             : 3.79%
+
+--------------------------------------------------------------------------------
+5. SCIENTIFIC & METHODOLOGICAL DISCLAIMERS (VIVA DEFENSE)
+--------------------------------------------------------------------------------
+* Operational Definition : Target is an engagement-based proxy (Medium/High = Retained,
+                           Low = At Risk).
+* Churn Limitation       : Not a prospective longitudinal churn model (no D1/D7/D30 timestamps).
+* Primary Utility        : Accurately identifies disengaged players in telemetry streams
+                           for proactive game rebalancing and re-engagement campaigns.
+================================================================================
