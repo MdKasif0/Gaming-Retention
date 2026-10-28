@@ -33,12 +33,42 @@ def _stretch_kwargs(widget_func):
     return {"use_container_width": True}
 
 # ==============================================================================
-# 2. BESPOKE GAMEPULSE DESIGN SYSTEM (DARK ANALYTICS PALETTE)
+# 2. VECTOR SVG ICON REPOSITORY (LUCIDE / FEATHER SPECIFICATION)
 # ==============================================================================
-# Palette Definitions:
-# Primary BG: #0B0D10 | Secondary BG: #101318 | Primary Surface: #15191F | Elevated: #1B2028
-# Borders: #2A3039 / #232831 | Text: #F5F7FA / #A6AFBD / #747F8F
-# Accents: Coral #FF5B55 | Lime #C7F36B | Cyan #7DD3FC | Warning #F3C969 | Success #62D6A5
+SVG_ICONS = {
+    "pulse": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>',
+    "gamepad": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>',
+    "analytics": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
+    "trending": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
+    "cpu": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>',
+    "book": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
+    "user": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+    "activity": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+    "trophy": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H8c-.55 0-1 .45-1 1v1h10v-1c0-.55-.45-1-1-1h-1c-.55 0-1-.45-1-1v-2.34"/><path d="M18 4H6v7a6 6 0 0 0 12 0V4z"/></svg>',
+    "alert": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+    "shield": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>',
+    "star": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+    "target": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+    "globe": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+    "graduation": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>',
+    "lightbulb": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>',
+    "scale": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21"/><polyline points="5 8 12 5 19 8"/><path d="M5 8l-3 7a4 4 0 0 0 6 0z"/><path d="M19 8l-3 7a4 4 0 0 0 6 0z"/><line x1="4" y1="21" x2="20" y2="21"/></svg>',
+    "settings": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+    "grid": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
+    "info": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+    "arrow_right": '<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>'
+}
+
+def svg_icon(name, color="#FF5B55", size=20, stroke=2):
+    """Generates an inline SVG element formatted with exact dimensions and colors."""
+    template = SVG_ICONS.get(name, "")
+    if not template:
+        return ""
+    return template.format(color=color, size=size, stroke=stroke)
+
+# ==============================================================================
+# 3. BESPOKE GAMEPULSE DESIGN SYSTEM (DARK ANALYTICS PALETTE)
+# ==============================================================================
 st.markdown("""
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -145,10 +175,10 @@ st.markdown("""
         margin-bottom: 0.5rem;
         display: flex;
         align-items: center;
-        gap: 0.4rem;
+        gap: 0.45rem;
     }
 
-    /* Custom Radio Navigation Styling in Sidebar */
+    /* Custom Radio Navigation Styling in Sidebar with Vector SVGs */
     div[data-testid="stRadio"] > div {
         gap: 0.35rem !important;
     }
@@ -179,6 +209,55 @@ st.markdown("""
     div[data-testid="stRadio"] label[data-checked="true"] p {
         color: #FFFFFF !important;
         font-weight: 600 !important;
+    }
+
+    /* Vector SVG Navigation Icons injected before radio label text */
+    div[data-testid="stRadio"] label:nth-of-type(1) p::before {
+        content: '';
+        display: inline-block;
+        width: 17px;
+        height: 17px;
+        margin-right: 9px;
+        vertical-align: -2px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23FF5B55' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='6' y1='12' x2='10' y2='12'/%3E%3Cline x1='8' y1='10' x2='8' y2='14'/%3E%3Cline x1='15' y1='13' x2='15.01' y2='13'/%3E%3Cline x1='18' y1='11' x2='18.01' y2='11'/%3E%3Crect x='2' y='6' width='20' height='12' rx='6'/%3E%3C/svg%3E");
+    }
+
+    div[data-testid="stRadio"] label:nth-of-type(2) p::before {
+        content: '';
+        display: inline-block;
+        width: 17px;
+        height: 17px;
+        margin-right: 9px;
+        vertical-align: -2px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%237DD3FC' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='20' x2='18' y2='10'/%3E%3Cline x1='12' y1='20' x2='12' y2='4'/%3E%3Cline x1='6' y1='20' x2='6' y2='14'/%3E%3C/svg%3E");
+    }
+
+    div[data-testid="stRadio"] label:nth-of-type(3) p::before {
+        content: '';
+        display: inline-block;
+        width: 17px;
+        height: 17px;
+        margin-right: 9px;
+        vertical-align: -2px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23C7F36B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='4' width='16' height='16' rx='2'/%3E%3Crect x='9' y='9' width='6' height='6'/%3E%3Cline x1='9' y1='1' x2='9' y2='4'/%3E%3Cline x1='15' y1='1' x2='15' y2='4'/%3E%3Cline x1='9' y1='20' x2='9' y2='23'/%3E%3Cline x1='15' y1='20' x2='15' y2='23'/%3E%3Cline x1='20' y1='9' x2='23' y2='9'/%3E%3Cline x1='20' y1='14' x2='23' y2='14'/%3E%3Cline x1='1' y1='9' x2='4' y2='9'/%3E%3Cline x1='1' y1='14' x2='4' y2='14'/%3E%3C/svg%3E");
+    }
+
+    div[data-testid="stRadio"] label:nth-of-type(4) p::before {
+        content: '';
+        display: inline-block;
+        width: 17px;
+        height: 17px;
+        margin-right: 9px;
+        vertical-align: -2px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23F3C969' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/%3E%3Cpath d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/%3E%3C/svg%3E");
     }
 
     /* Sidebar Status Card */
@@ -293,8 +372,6 @@ st.markdown("""
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.6rem;
-        color: #FF5B55;
         flex-shrink: 0;
     }
 
@@ -473,8 +550,6 @@ st.markdown("""
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.5rem;
-        color: #FF5B55;
         margin-bottom: 1rem;
     }
 
@@ -527,7 +602,7 @@ st.markdown("""
         margin: 0;
         display: flex;
         align-items: center;
-        gap: 0.6rem;
+        gap: 0.75rem;
     }
 
     .gp-decision-desc {
@@ -635,7 +710,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 3. ASSETS & VERIFIED MODEL LOADING
+# 4. ASSETS & VERIFIED MODEL LOADING
 # ==============================================================================
 @st.cache_resource
 def load_assets():
@@ -760,16 +835,14 @@ def get_domain_feature_importance(pipe, meta):
     })
 
 # ==============================================================================
-# 4. SIDEBAR NAVIGATION & CONTROLS
+# 5. SIDEBAR NAVIGATION & CONTROLS
 # ==============================================================================
 with st.sidebar:
     # GamePulse Brand Header
-    st.markdown("""
+    st.markdown(f"""
     <div class="gp-brand-box">
         <div class="gp-pulse-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF5B55" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-            </svg>
+            {svg_icon('pulse', '#FF5B55', 22, 2.5)}
         </div>
         <div class="gp-brand-text">
             <span class="gp-brand-title">GamePulse</span>
@@ -779,7 +852,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
     # Workspace Section Navigation
-    st.markdown('<div class="gp-sidebar-label">~ WORKSPACE</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="gp-sidebar-label">{svg_icon("grid", "#747F8F", 14)} WORKSPACE</div>', unsafe_allow_html=True)
     
     NAV_OPTIONS = [
         "Player Simulator",
@@ -802,7 +875,7 @@ with st.sidebar:
     st.markdown('<div style="margin-top: 1.4rem;"></div>', unsafe_allow_html=True)
 
     # Player Preset Persona Selector
-    st.markdown('<div class="gp-sidebar-label">👤 PLAYER PRESET</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="gp-sidebar-label">{svg_icon("user", "#747F8F", 14)} PLAYER PRESET</div>', unsafe_allow_html=True)
     
     PRESET_CHOICES = [
         "Custom Player",
@@ -841,7 +914,7 @@ with st.sidebar:
     st.markdown('<div style="margin-top: 1.4rem;"></div>', unsafe_allow_html=True)
 
     # Live Engine Status Card
-    st.markdown('<div class="gp-sidebar-label">⚙️ MODEL STATUS</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="gp-sidebar-label">{svg_icon("settings", "#747F8F", 14)} MODEL STATUS</div>', unsafe_allow_html=True)
     
     test_metrics = metadata.get("test_metrics", {}) if model_loaded else {}
     f1_val = test_metrics.get("f1_score", 0.96366)
@@ -891,15 +964,18 @@ with st.sidebar:
 
     # Sidebar Attribution Footer
     st.markdown('<div style="margin-top: 2rem;"></div>', unsafe_allow_html=True)
-    st.markdown("""
-    <div style="color:#747F8F; font-size:0.74rem; line-height:1.45; padding-left: 0.2rem;">
-        🎓 Academic ML Project · 2026<br>
-        <span style="color:#A6AFBD; font-weight:600;">Md Kasif Uddin</span>
+    st.markdown(f"""
+    <div style="display:flex; align-items:center; gap:0.45rem; color:#747F8F; font-size:0.74rem; line-height:1.45; padding-left: 0.2rem;">
+        {svg_icon('graduation', '#747F8F', 16)}
+        <div>
+            Academic ML Project · 2026<br>
+            <span style="color:#A6AFBD; font-weight:600;">Md Kasif Uddin</span>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 5. GLOBAL TOP HEADER COMPONENT
+# 6. GLOBAL TOP HEADER COMPONENT
 # ==============================================================================
 st.markdown(f"""
 <div class="gp-global-header">
@@ -913,8 +989,8 @@ st.markdown(f"""
             {status_dot}
             <span>{status_text}</span>
         </div>
-        <div style="width:32px; height:32px; border-radius:50%; background: #1B2028; border:1px solid #2A3039; display:flex; align-items:center; justify-content:center; font-size:0.82rem; color:#A6AFBD;">
-            👤
+        <div style="width:32px; height:32px; border-radius:50%; background: #1B2028; border:1px solid #2A3039; display:flex; align-items:center; justify-content:center;">
+            {svg_icon('user', '#A6AFBD', 16)}
         </div>
     </div>
 </div>
@@ -925,11 +1001,11 @@ st.markdown(f"""
 # ==============================================================================
 if st.session_state["current_page"] == "Player Simulator":
     # Contextual Page Header
-    st.markdown("""
+    st.markdown(f"""
     <div class="gp-page-header">
         <div class="gp-title-area">
             <div class="gp-icon-container">
-                🎮
+                {svg_icon('gamepad', '#FF5B55', 26)}
             </div>
             <div class="gp-title-text">
                 <h1>Player Simulator</h1>
@@ -939,7 +1015,9 @@ if st.session_state["current_page"] == "Player Simulator":
             </div>
         </div>
         <div class="gp-info-badge-card">
-            <div style="font-size:1.4rem;">📊</div>
+            <div style="display:flex; align-items:center;">
+                {svg_icon('analytics', '#747F8F', 24)}
+            </div>
             <div class="gp-info-badge-text">
                 TURN PLAYER DATA INTO MEANINGFUL ENGAGEMENT INSIGHTS
             </div>
@@ -948,9 +1026,9 @@ if st.session_state["current_page"] == "Player Simulator":
     """, unsafe_allow_html=True)
 
     # Methodological Disclaimer Banner
-    st.markdown("""
+    st.markdown(f"""
     <div class="gp-disclosure-banner">
-        <span style="font-size:1.15rem; color:#F3C969;">⚠️</span>
+        <span>{svg_icon('alert', '#F3C969', 18)}</span>
         <div>
             <strong style="color:#F3C969;">Engagement-based retention proxy.</strong>
             This model classifies engagement tiers, not observed future churn timestamps.
@@ -966,9 +1044,9 @@ if st.session_state["current_page"] == "Player Simulator":
         # Card 1: Player Profile
         # ----------------------------------------------------------------------
         with col_p1:
-            st.markdown("""
+            st.markdown(f"""
             <div class="gp-card-header">
-                <span style="font-size:1.1rem;">👤</span>
+                {svg_icon('user', '#7DD3FC', 18)}
                 <span class="gp-card-title">Player Profile</span>
             </div>
             <div class="gp-card-subtitle">Basic demographic and gaming preferences</div>
@@ -1002,9 +1080,9 @@ if st.session_state["current_page"] == "Player Simulator":
         # Card 2: Play Behavior
         # ----------------------------------------------------------------------
         with col_p2:
-            st.markdown("""
+            st.markdown(f"""
             <div class="gp-card-header">
-                <span style="font-size:1.1rem; color:#FF5B55;">📊</span>
+                {svg_icon('activity', '#FF5B55', 18)}
                 <span class="gp-card-title">Play Behavior</span>
             </div>
             <div class="gp-card-subtitle">Gaming activity and session patterns</div>
@@ -1030,9 +1108,9 @@ if st.session_state["current_page"] == "Player Simulator":
         # Card 3: Progression & Monetization
         # ----------------------------------------------------------------------
         with col_p3:
-            st.markdown("""
+            st.markdown(f"""
             <div class="gp-card-header">
-                <span style="font-size:1.1rem; color:#F3C969;">🏆</span>
+                {svg_icon('trophy', '#F3C969', 18)}
                 <span class="gp-card-title">Progression & Monetization</span>
             </div>
             <div class="gp-card-subtitle">Game difficulty, progression and spending</div>
@@ -1064,7 +1142,7 @@ if st.session_state["current_page"] == "Player Simulator":
 
         st.markdown('<div style="margin-top: 0.6rem;"></div>', unsafe_allow_html=True)
         analyze_clicked = st.form_submit_button(
-            label="⚡ Analyze Player Engagement  →",
+            label="Analyze Player Engagement",
             type="primary",
             **_stretch_kwargs(st.form_submit_button)
         )
@@ -1073,8 +1151,11 @@ if st.session_state["current_page"] == "Player Simulator":
     implied_playtime = (sessions_per_week * avg_session_duration) / 60.0
     if implied_playtime > playtime_hours + 8.0:
         st.markdown(f"""
-        <div style="background: rgba(125, 211, 252, 0.08); border: 1px solid rgba(125, 211, 252, 0.3); border-radius: 8px; padding: 0.6rem 1rem; font-size: 0.8rem; color: #7DD3FC; margin-top: 0.8rem;">
-            ℹ️ <strong>Telemetry Note:</strong> Entered frequency ({sessions_per_week} sessions) and duration ({avg_session_duration} mins) imply ~{implied_playtime:.1f} hours/week versus entered playtime ({playtime_hours} hrs). The Random Forest model evaluates each feature independently.
+        <div style="background: rgba(125, 211, 252, 0.08); border: 1px solid rgba(125, 211, 252, 0.3); border-radius: 8px; padding: 0.6rem 1rem; font-size: 0.82rem; color: #7DD3FC; margin-top: 0.8rem; display:flex; align-items:center; gap:0.55rem;">
+            {svg_icon('info', '#7DD3FC', 16)}
+            <div>
+                <strong>Telemetry Note:</strong> Entered frequency ({sessions_per_week} sessions) and duration ({avg_session_duration} mins) imply ~{implied_playtime:.1f} hours/week versus entered playtime ({playtime_hours} hrs). The Random Forest model evaluates each feature independently.
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1119,6 +1200,7 @@ if st.session_state["current_page"] == "Player Simulator":
                         badge_color = "#C7F36B"
                         badge_border = "#C7F36B"
                         cohort_color = "#C7F36B"
+                        tier_icon = svg_icon("star", "#C7F36B", 22)
                     else:
                         engagement_tier = "Medium"
                         tier_label = "MODERATE ENGAGEMENT (RETAINED)"
@@ -1128,6 +1210,7 @@ if st.session_state["current_page"] == "Player Simulator":
                         badge_color = "#F3C969"
                         badge_border = "#F3C969"
                         cohort_color = "#F3C969"
+                        tier_icon = svg_icon("shield", "#F3C969", 22)
                 else:
                     engagement_tier = "Low"
                     tier_label = "CRITICAL CHURN HAZARD (AT RISK)"
@@ -1137,13 +1220,14 @@ if st.session_state["current_page"] == "Player Simulator":
                     badge_color = "#FF5B55"
                     badge_border = "#FF5B55"
                     cohort_color = "#FF5B55"
+                    tier_icon = svg_icon("alert", "#FF5B55", 22)
 
                 # 1. Decision Hero Banner
                 st.markdown(f"""
                 <div class="gp-decision-banner {banner_cls}">
                     <div>
                         <div class="gp-decision-title" style="color: {badge_color};">
-                            <span>{'⭐' if engagement_tier == 'High' else '🛡️' if engagement_tier == 'Medium' else '⚠️'}</span>
+                            <span>{tier_icon}</span>
                             {tier_label}
                         </div>
                         <div class="gp-decision-desc">{tier_desc}</div>
@@ -1181,7 +1265,7 @@ if st.session_state["current_page"] == "Player Simulator":
                 """, unsafe_allow_html=True)
 
                 # 3. Dual Probability Balance Progress Bars
-                st.markdown("#### ⚖️ Retention vs. Churn Hazard Probability Balance")
+                st.markdown(f"#### <span style='display:inline-flex; align-items:center; gap:0.45rem;'>{svg_icon('scale', '#7DD3FC', 18)} Retention vs. Churn Hazard Probability Balance</span>", unsafe_allow_html=True)
                 cp1, cp2 = st.columns([prob_retained if prob_retained > 0 else 0.01, prob_risk if prob_risk > 0 else 0.01])
                 with cp1:
                     st.progress(prob_retained / 100.0, text=f"Retained Probability: {prob_retained:.1f}%")
@@ -1192,7 +1276,7 @@ if st.session_state["current_page"] == "Player Simulator":
                 c_act, c_bench = st.columns([1.1, 1])
 
                 with c_act:
-                    st.markdown("#### 💡 LiveOps Strategic Intervention")
+                    st.markdown(f"#### <span style='display:inline-flex; align-items:center; gap:0.45rem;'>{svg_icon('lightbulb', '#F3C969', 18)} LiveOps Strategic Intervention</span>", unsafe_allow_html=True)
                     if engagement_tier == "High":
                         st.markdown("""
                         <div class="gp-action-card" style="border-left: 4px solid #C7F36B;">
@@ -1234,7 +1318,7 @@ if st.session_state["current_page"] == "Player Simulator":
                         """, unsafe_allow_html=True)
 
                 with c_bench:
-                    st.markdown("#### 📊 Telemetry vs. Global Dataset Baseline")
+                    st.markdown(f"#### <span style='display:inline-flex; align-items:center; gap:0.45rem;'>{svg_icon('analytics', '#FF5B55', 18)} Telemetry vs. Global Dataset Baseline</span>", unsafe_allow_html=True)
                     comp_df = pd.DataFrame({
                         "Telemetry Attribute": ["Weekly Sessions", "Session Duration (min)", "Playtime (hrs)", "Player Level"],
                         "Current Player": [sessions_per_week, avg_session_duration, playtime_hours, player_level],
@@ -1246,7 +1330,7 @@ if st.session_state["current_page"] == "Player Simulator":
                         ]
                     })
                     comp_df["Variance"] = comp_df["Current Player"] - comp_df["Dataset Baseline"]
-                    comp_df["Benchmark"] = comp_df["Variance"].apply(lambda v: f"▲ +{v:.1f}" if v > 0 else f"▼ {v:.1f}")
+                    comp_df["Benchmark"] = comp_df["Variance"].apply(lambda v: f"+{v:.1f}" if v > 0 else f"{v:.1f}")
 
                     st.dataframe(
                         comp_df[["Telemetry Attribute", "Current Player", "Dataset Baseline", "Benchmark"]],
@@ -1258,9 +1342,11 @@ if st.session_state["current_page"] == "Player Simulator":
                 st.error(f"Inference execution error: {str(e)}")
     else:
         # Professional Empty State
-        st.markdown("""
+        st.markdown(f"""
         <div class="gp-empty-state-card">
-            <div class="gp-empty-state-icon">📊</div>
+            <div class="gp-empty-state-icon">
+                {svg_icon('analytics', '#FF5B55', 28)}
+            </div>
             <div class="gp-empty-title">Ready to analyze a player</div>
             <div class="gp-empty-desc">
                 Configure player demographic attributes and session telemetry above, then select <strong>Analyze Player Engagement</strong> to evaluate retention probability.
@@ -1273,11 +1359,11 @@ if st.session_state["current_page"] == "Player Simulator":
 # ==============================================================================
 elif st.session_state["current_page"] == "Analytics & Insights":
     # Contextual Header
-    st.markdown("""
+    st.markdown(f"""
     <div class="gp-page-header">
         <div class="gp-title-area">
             <div class="gp-icon-container">
-                📈
+                {svg_icon('trending', '#7DD3FC', 26)}
             </div>
             <div class="gp-title-text">
                 <h1>Analytics and Insights</h1>
@@ -1422,21 +1508,27 @@ elif st.session_state["current_page"] == "Analytics & Insights":
 
     # Analytical Observations Cards
     st.markdown("---")
-    st.markdown("#### 🔬 Empirical Findings & Observations")
+    st.markdown("#### Empirical Findings & Observations")
     
     col_ob1, col_ob2 = st.columns(2)
     with col_ob1:
-        st.markdown("""
+        st.markdown(f"""
         <div style="background:#15191F; border:1px solid #2A3039; border-left:4px solid #FF5B55; border-radius:10px; padding:1.1rem; font-size:0.88rem; line-height:1.5;">
-            <strong>🎯 Telemetry Habits Drive Engagement:</strong><br>
+            <div style="display:flex; align-items:center; gap:0.45rem; margin-bottom:0.4rem;">
+                {svg_icon('target', '#FF5B55', 18)}
+                <strong>Telemetry Habits Drive Engagement</strong>
+            </div>
             • <code>SessionsPerWeek</code> (42.1%) and <code>AvgSessionDurationMinutes</code> (37.4%) together represent <strong>~80% of predictive power</strong>.<br>
             • High-engagement players log an average of <strong>14.25 sessions per week</strong> (vs. 4.53 for at-risk cohorts) and remain in game for <strong>131.9 minutes per session</strong> (vs. 66.9 minutes).
         </div>
         """, unsafe_allow_html=True)
     with col_ob2:
-        st.markdown("""
+        st.markdown(f"""
         <div style="background:#15191F; border:1px solid #2A3039; border-left:4px solid #7DD3FC; border-radius:10px; padding:1.1rem; font-size:0.88rem; line-height:1.5;">
-            <strong>🌐 Demographic Invariance:</strong><br>
+            <div style="display:flex; align-items:center; gap:0.45rem; margin-bottom:0.4rem;">
+                {svg_icon('globe', '#7DD3FC', 18)}
+                <strong>Demographic Invariance</strong>
+            </div>
             • Demographics (Age, Gender, Server Location) contribute <strong>less than 4% total Gini importance</strong>.<br>
             • Player engagement loops operate identically regardless of age cohort or geographic region once telemetry habits are established.
         </div>
@@ -1447,11 +1539,11 @@ elif st.session_state["current_page"] == "Analytics & Insights":
 # ==============================================================================
 elif st.session_state["current_page"] == "Model Audit":
     # Contextual Header
-    st.markdown("""
+    st.markdown(f"""
     <div class="gp-page-header">
         <div class="gp-title-area">
             <div class="gp-icon-container">
-                🔬
+                {svg_icon('cpu', '#C7F36B', 26)}
             </div>
             <div class="gp-title-text">
                 <h1>Model Architecture and Audit</h1>
@@ -1495,9 +1587,12 @@ elif st.session_state["current_page"] == "Model Audit":
         ])
         ```
         """)
-        st.markdown("""
-        <div style="background: rgba(98, 214, 165, 0.08); border-left: 3px solid #62D6A5; padding: 0.8rem 1rem; border-radius: 6px; font-size: 0.84rem; color: #62D6A5;">
-            <strong>Zero Leakage Guarantee:</strong> All transformers and encoders were fitted strictly inside cross-validation training folds. Test and holdout samples were strictly transformed without leakage.
+        st.markdown(f"""
+        <div style="background: rgba(98, 214, 165, 0.08); border-left: 3px solid #62D6A5; padding: 0.8rem 1rem; border-radius: 6px; font-size: 0.84rem; color: #62D6A5; display:flex; align-items:center; gap:0.5rem;">
+            {svg_icon('shield', '#62D6A5', 18)}
+            <div>
+                <strong>Zero Leakage Guarantee:</strong> All transformers and encoders were fitted strictly inside cross-validation training folds. Test and holdout samples were strictly transformed without leakage.
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1505,18 +1600,18 @@ elif st.session_state["current_page"] == "Model Audit":
         st.markdown("#### Prediction Pipeline Architecture")
         st.markdown("""
         <div style="background:#15191F; border:1px solid #2A3039; border-radius:12px; padding:1.2rem; font-family:'JetBrains Mono', monospace; font-size:0.82rem; line-height:1.6;">
-            <div style="color:#7DD3FC;">[1] PLAYER TELEMETRY INPUT</div>
-            <div style="color:#747F8F; padding-left:1.5rem;">↓ (11 Raw Behavioral & Demographic Attributes)</div>
-            <div style="color:#C7F36B;">[2] COLUMNTRANSFORMER PREPROCESSING</div>
-            <div style="color:#747F8F; padding-left:1.5rem;">├─ Median Imputation (7 Numerical Features)</div>
-            <div style="color:#747F8F; padding-left:1.5rem;">└─ OneHotEncoding (4 Categoricals → 14 Dummy Levels)</div>
-            <div style="color:#747F8F; padding-left:1.5rem;">↓ (21 Total Engineered Dimensions)</div>
-            <div style="color:#FF5B55;">[3] RANDOM FOREST ENSEMBLE (150 TREES)</div>
-            <div style="color:#747F8F; padding-left:1.5rem;">├─ Bootstrapped Bagging (min_samples_split=5)</div>
-            <div style="color:#747F8F; padding-left:1.5rem;">└─ Balanced Class Penalty Weights: w_j = N / (2 * N_j)</div>
-            <div style="color:#747F8F; padding-left:1.5rem;">↓ (Soft Probability Averaging)</div>
-            <div style="color:#F3C969;">[4] RETENTION RISK PROXY CLASSIFICATION</div>
-            <div style="color:#747F8F; padding-left:1.5rem;">└─ Class 1 (Retained) vs Class 0 (At Risk Churn Hazard)</div>
+            <div style="color:#7DD3FC; font-weight:600;">[1] PLAYER TELEMETRY INPUT</div>
+            <div style="color:#747F8F; padding-left:1.5rem;">│ (11 Raw Behavioral & Demographic Attributes)</div>
+            <div style="color:#C7F36B; font-weight:600;">[2] COLUMNTRANSFORMER PREPROCESSING</div>
+            <div style="color:#747F8F; padding-left:1.5rem;">├── Median Imputation (7 Numerical Features)</div>
+            <div style="color:#747F8F; padding-left:1.5rem;">└── OneHotEncoding (4 Categoricals → 14 Dummy Levels)</div>
+            <div style="color:#747F8F; padding-left:1.5rem;">│ (21 Total Engineered Dimensions)</div>
+            <div style="color:#FF5B55; font-weight:600;">[3] RANDOM FOREST ENSEMBLE (150 TREES)</div>
+            <div style="color:#747F8F; padding-left:1.5rem;">├── Bootstrapped Bagging (min_samples_split=5)</div>
+            <div style="color:#747F8F; padding-left:1.5rem;">└── Balanced Penalty Weights: w_j = N / (2 * N_j)</div>
+            <div style="color:#747F8F; padding-left:1.5rem;">│ (Soft Probability Averaging)</div>
+            <div style="color:#F3C969; font-weight:600;">[4] RETENTION RISK PROXY CLASSIFICATION</div>
+            <div style="color:#747F8F; padding-left:1.5rem;">└── Class 1 (Retained) vs Class 0 (At Risk Churn Hazard)</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1572,7 +1667,7 @@ elif st.session_state["current_page"] == "Model Audit":
 
     # Section D: Aggregated Feature Importance Ranking
     st.markdown("---")
-    st.markdown("#### 🏆 Feature Importance Analysis (Aggregated Domain View)")
+    st.markdown(f"#### <span style='display:inline-flex; align-items:center; gap:0.45rem;'>{svg_icon('trophy', '#FF5B55', 18)} Feature Importance Analysis (Aggregated Domain View)</span>", unsafe_allow_html=True)
     
     df_domain_fi = get_domain_feature_importance(pipeline, metadata)
     col_fi1, col_fi2 = st.columns([1, 1.2])
@@ -1609,11 +1704,11 @@ elif st.session_state["current_page"] == "Model Audit":
 # ==============================================================================
 elif st.session_state["current_page"] == "Methodology & Viva":
     # Contextual Header
-    st.markdown("""
+    st.markdown(f"""
     <div class="gp-page-header">
         <div class="gp-title-area">
             <div class="gp-icon-container">
-                📖
+                {svg_icon('book', '#F3C969', 26)}
             </div>
             <div class="gp-title-text">
                 <h1>Methodology and Viva</h1>
@@ -1677,7 +1772,7 @@ elif st.session_state["current_page"] == "Methodology & Viva":
 
     # Technical Viva Defense / Judge Q&A Accordion
     st.markdown("---")
-    st.markdown("### 🎓 Technical Viva Defense & Judge Questions")
+    st.markdown(f"### <span style='display:inline-flex; align-items:center; gap:0.55rem;'>{svg_icon('graduation', '#62D6A5', 22)} Technical Viva Defense & Judge Questions</span>", unsafe_allow_html=True)
 
     q1, q2 = st.columns(2)
 
@@ -1715,7 +1810,7 @@ elif st.session_state["current_page"] == "Methodology & Viva":
             """)
 
 # ==============================================================================
-# 6. GLOBAL APPLICATION FOOTER
+# 7. GLOBAL APPLICATION FOOTER
 # ==============================================================================
 st.markdown("<hr style='border: none; border-top: 1px solid #232831; margin: 3rem 0 1.2rem 0;'>", unsafe_allow_html=True)
 st.markdown("""
