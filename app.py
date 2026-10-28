@@ -887,7 +887,7 @@ with tab_analytics:
         st.markdown("#### Feature Importance Chart")
         feat_chart_file = Path("outputs/feature_importance_analysis.png")
         if feat_chart_file.exists():
-            st.image(str(feat_chart_file), caption="High-Resolution Feature Importance Ranking (Post-OneHotEncoding & Aggregated)", use_container_width=True)
+            st.image(str(feat_chart_file), caption="High-Resolution Feature Importance Ranking (Post-OneHotEncoding & Aggregated)", **_stretch_kwargs(st.image))
         else:
             st.info("Feature importance plot artifact available in /outputs/feature_importance_analysis.png")
 
@@ -897,11 +897,11 @@ with tab_analytics:
     with col_d1:
         roc_file = Path("outputs/roc_pr_curves.png")
         if roc_file.exists():
-            st.image(str(roc_file), caption="ROC Curve (AUC = 0.9430) and Precision-Recall Curve", use_container_width=True)
+            st.image(str(roc_file), caption="ROC Curve (AUC = 0.9430) and Precision-Recall Curve", **_stretch_kwargs(st.image))
     with col_d2:
         dist_file = Path("outputs/behavioral_feature_distributions.png")
         if dist_file.exists():
-            st.image(str(dist_file), caption="Behavioral Density Distribution by Retention Proxy Status", use_container_width=True)
+            st.image(str(dist_file), caption="Behavioral Density Distribution by Retention Proxy Status", **_stretch_kwargs(st.image))
 
 # ==============================================================================
 # TAB 3: MODEL ARCHITECTURE & AUDIT
@@ -974,11 +974,11 @@ with tab_architecture:
             ],
             "Industry Benchmark": ["> 85.0%", "> 90.0%", "> 90.0%", "> 90.0%", "> 80.0%", "> 0.8500"]
         }
-        st.dataframe(pd.DataFrame(perf_data), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(perf_data), hide_index=True, **_stretch_kwargs(st.dataframe))
         
         cm_file = Path("outputs/confusion_matrix.png")
         if cm_file.exists():
-            st.image(str(cm_file), caption="Holdout Test Confusion Matrix (1,861 At-Risk Players Intercepted)", use_container_width=True)
+            st.image(str(cm_file), caption="Holdout Test Confusion Matrix (1,861 At-Risk Players Intercepted)", **_stretch_kwargs(st.image))
 
 # ==============================================================================
 # TAB 4: ACADEMIC METHODOLOGY & VIVA DEFENSE GUIDE
