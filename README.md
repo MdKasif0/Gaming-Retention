@@ -1,12 +1,16 @@
-# AI Based Online Gaming Player Retention Prediction Using Random Forest
+# GamePulse | Gaming Retention Intelligence Platform
+### AI-Powered Player Retention Prediction & LiveOps Behavioral Analytics
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.30%2B-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-Machine%20Learning-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
+[![Plotly](https://img.shields.io/badge/Plotly-Interactive%20Charts-3F4F75?logo=plotly&logoColor=white)](https://plotly.com/)
 [![Google Colab](https://img.shields.io/badge/Google%20Colab-Connected-F9AB00?logo=googlecolab&logoColor=white)](https://colab.research.google.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-An end-to-end Machine Learning system developed for college AI/ML curriculum submission and viva defense. This project analyzes player telemetry and demographics from 40,034 gaming records to forecast player retention risk using an ensemble **Random Forest Classifier** wrapped in a **Streamlit AI web dashboard**.
+> *"Understand players. Predict engagement. Act with insight."*
+
+An end-to-end Machine Learning intelligence platform developed for college AI/ML curriculum submission, hackathons, and live viva defense. This platform analyzes player session telemetry and demographics across **40,034 gaming records** to forecast player churn hazard using an ensemble **Random Forest Classifier** wrapped in a commercial-grade **Streamlit AI Web Dashboard** ([`app.py`](app.py)).
 
 ---
 
@@ -178,22 +182,45 @@ Aggregating one-hot encoded levels back into conceptual domain features demonstr
 
 ---
 
-## 💻 Web Application Architecture & Features
+## 💻 Web Application Architecture & Features (GamePulse)
 
-The Streamlit web application (`app.py`) provides an interactive interface for live retention forecasting:
+The Streamlit web application (`app.py`) provides an interactive interface for live retention forecasting and behavioral analytics:
 
 ```
-Gaming Retention AI (Streamlit)
- ├── @st.cache_resource ──> Loads models/gaming_retention_model.joblib
- ├── Sidebar: Persona Presets (Veteran, Disengaged, Casual, Custom)
- ├── Player Input Form (Demographics, Telemetry Sliders, Progression)
- ├── Dynamic Inference Engine:
- │    ├── Prediction Banner ("PLAYER LIKELY TO BE RETAINED" vs "PLAYER IS AT RISK")
- │    ├── 4 Metric Cards (Status, Retention %, Risk %, Model Name)
- │    ├── Dual Visual Probability Progress Bars
- │    ├── AI Behavioral Insights (Feature ranking & variance against dataset averages)
- │    └── Model Information & Audit Table
- └── Expandable Viva Defense & Academic Methodology Notes
+GamePulse (Streamlit Platform)
+ ├── Refined Sidebar:
+ │    ├── Brand Header (SVG Waveform Pulse Icon & "GamePulse" Wordmark)
+ │    ├── Navigation (~ WORKSPACE: Simulator, Analytics, Audit, Viva)
+ │    ├── Player Presets (Veteran, Disengaged, Casual, Custom)
+ │    ├── Live Model Status Card (Dynamic dot, Tree count, Macro F1, ROC-AUC, Measured Latency)
+ │    └── Minimal Attribution Footer
+ ├── Compact Global Header:
+ │    ├── Breadcrumb (Workspace / Active Page)
+ │    └── Status Pill Badge (● Model loaded)
+ └── 4 Dedicated Workspaces:
+      ├── 1. Player Simulator:
+      │    ├── 3 Balanced Input Panels (Profile, Session Telemetry, Progression/Monetization)
+      │    ├── Coral CTA Button ("Analyze Player Engagement →")
+      │    ├── Decision Hero Banner (Low, Medium, High Engagement)
+      │    ├── 4 Executive Metric Boxes (Cohort, Retention %, Risk %, Confidence %)
+      │    ├── Dual Probability Balance Progress Bars
+      │    ├── Tailored LiveOps Strategic Action Plans
+      │    └── Telemetry vs Baseline Benchmark Variance Table
+      ├── 2. Analytics & Insights:
+      │    ├── 4 Top KPI Summary Cards (Records, Features, Tiers, Cleanliness)
+      │    ├── Interactive Plotly Donut Chart (Engagement Distribution)
+      │    ├── Interactive Plotly Bar Charts (Weekly Sessions & Session Durations)
+      │    ├── Interactive Correlation Heatmap Matrix
+      │    └── Empirical Takeaway Observation Cards
+      ├── 3. Model Architecture & Audit:
+      │    ├── Pipeline Architecture & Scikit-Learn Code
+      │    ├── Connected Flowchart Pipeline Diagram
+      │    ├── Holdout Evaluation Scorecard & Plotly Confusion Matrix
+      │    ├── Aggregated Domain Feature Importance Ranking (Interactive Chart + Table)
+      │    └── Zero Data Leakage & Proxy Audit Disclaimers
+      └── 4. Methodology & Viva Defense:
+           ├── Structured Technical Documentation Cards
+           └── Expandable Judge / Viva Defense Q&A Accordion
 ```
 
 ---
