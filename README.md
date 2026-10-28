@@ -57,7 +57,7 @@ The system is built upon the canonical **Online Gaming Behavior Dataset**:
 - **Instances:** `40,034` player records.
 - **Attributes:** `13` features (1 unique identifier, 11 behavioral/demographic inputs, 1 engagement tier).
 - **Data Integrity:** `0` missing values, `0` duplicate rows.
-- **Original Source File:** `online_gaming_behavior_dataset.csv` (preserved 100% untouched).
+- **Original Source File:** `data/online_gaming_behavior_dataset.csv` (preserved 100% untouched).
 
 ---
 

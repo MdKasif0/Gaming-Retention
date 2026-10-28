@@ -1,9 +1,23 @@
 import os
+import inspect
 from pathlib import Path
 import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
+
+def _stretch_kwargs(widget_func):
+    """
+    Ensures seamless backward and forward compatibility across Streamlit versions:
+    Uses width='stretch' on modern Streamlit (>=1.35) to eliminate deprecation warnings,
+    and falls back to use_container_width=True on earlier Streamlit releases (1.30-1.34).
+    """
+    try:
+        if "width" in inspect.signature(widget_func).parameters:
+            return {"width": "stretch"}
+    except Exception:
+        pass
+    return {"use_container_width": True}
 
 # ==============================================================================
 # 1. PAGE CONFIGURATION & PREMIUM STYLING
@@ -393,6 +407,64 @@ def load_assets():
 
 pipeline, metadata = load_assets()
 
+def get_domain_feature_importance(pipeline, metadata):
+    """
+    Dynamically derives aggregated domain feature importance from outputs/feature_importance.csv
+    or directly from the fitted RandomForestClassifier estimator inside the pipeline.
+    """
+    domain_types = {
+        "SessionsPerWeek": "Telemetry",
+        "AvgSessionDurationMinutes": "Telemetry",
+        "PlayerLevel": "Progression",
+        "AchievementsUnlocked": "Gamification",
+        "PlayTimeHours": "Telemetry",
+        "Age": "Demographic",
+        "GameGenre": "Behavioral",
+        "Location": "Demographic",
+        "GameDifficulty": "UX Mechanics",
+        "Gender": "Demographic",
+        "InGamePurchases": "Monetization"
+    }
+    domain_importance = {}
+    fi_file = Path("outputs/feature_importance.csv")
+    if fi_file.exists():
+        try:
+            df_fi = pd.read_csv(fi_file)
+            for _, row in df_fi.iterrows():
+                feat = str(row["Feature"])
+                imp = float(row["Importance"])
+                parent = feat.split("_")[0] if "_" in feat else feat
+                domain_importance[parent] = domain_importance.get(parent, 0.0) + imp
+        except Exception:
+            domain_importance = {}
+
+    if not domain_importance and hasattr(pipeline, "named_steps"):
+        try:
+            rf = pipeline.named_steps["classifier"]
+            importances = rf.feature_importances_
+            feat_names = metadata.get("engineered_feature_names", [])
+            for feat, imp in zip(feat_names, importances):
+                parent = feat.split("_")[0] if "_" in feat else feat
+                domain_importance[parent] = domain_importance.get(parent, 0.0) + float(imp)
+        except Exception:
+            pass
+
+    if domain_importance:
+        records = []
+        for parent, imp in sorted(domain_importance.items(), key=lambda x: x[1], reverse=True):
+            records.append({
+                "Domain Feature": parent,
+                "Type": domain_types.get(parent, "Behavioral"),
+                "Cumulative Gini": imp * 100.0 if imp <= 1.0 else imp
+            })
+        return pd.DataFrame(records)
+
+    return pd.DataFrame({
+        "Domain Feature": ["SessionsPerWeek", "AvgSessionDurationMinutes", "PlayerLevel", "AchievementsUnlocked", "PlayTimeHours", "Age", "GameGenre", "Location", "GameDifficulty", "Gender", "InGamePurchases"],
+        "Type": ["Telemetry", "Telemetry", "Progression", "Gamification", "Telemetry", "Demographic", "Behavioral", "Demographic", "UX Mechanics", "Demographic", "Monetization"],
+        "Cumulative Gini": [42.14, 37.35, 5.67, 5.16, 3.79, 2.17, 1.27, 1.00, 0.77, 0.40, 0.28]
+    })
+
 # Extract model schema from metadata
 expected_features = metadata.get("input_features", [])
 cat_cols = metadata.get("categorical_features", [])
@@ -625,8 +697,8 @@ with tab_simulator:
         st.markdown("<div style='margin-top: 1rem;'></div>", unsafe_allow_html=True)
         submit_button = st.form_submit_button(
             label="🎯 Predict Player Retention",
-            width="stretch",
-            type="primary"
+            type="primary",
+            **_stretch_kwargs(st.form_submit_button)
         )
 
     # --------------------------------------------------------------------------
@@ -772,7 +844,7 @@ with tab_simulator:
                 
                 st.dataframe(
                     comparison_df[["Telemetry Metric", "Player Input", "Global Dataset Mean", "Status"]],
-                    width="stretch",
+                    use_container_width=True,
                     hide_index=True
                 )
                 
@@ -790,32 +862,23 @@ with tab_analytics:
     
     with col_feat1:
         st.markdown("#### Aggregated Domain Feature Contribution")
-        agg_importance_data = {
-            "Domain Feature": [
-                "SessionsPerWeek", "AvgSessionDurationMinutes", "PlayerLevel", 
-                "AchievementsUnlocked", "PlayTimeHours", "Age", "GameGenre", 
-                "Location", "GameDifficulty", "Gender", "InGamePurchases"
-            ],
-            "Type": [
-                "Telemetry", "Telemetry", "Progression", "Gamification", 
-                "Telemetry", "Demographic", "Behavioral", "Demographic", 
-                "UX Mechanics", "Demographic", "Monetization"
-            ],
-            "Cumulative Gini": [
-                42.14, 37.35, 5.67, 5.16, 3.79, 2.17, 1.27, 1.00, 0.77, 0.40, 0.28
-            ]
-        }
-        df_agg = pd.DataFrame(agg_importance_data)
+        df_agg = get_domain_feature_importance(pipeline, metadata)
         st.dataframe(
             df_agg.style.format({"Cumulative Gini": "{:.2f}%"}),
-            width="stretch",
+            use_container_width=True,
             hide_index=True
         )
         
-        st.markdown("""
+        top1_name = df_agg.iloc[0]["Domain Feature"] if len(df_agg) > 0 else "SessionsPerWeek"
+        top1_val = df_agg.iloc[0]["Cumulative Gini"] if len(df_agg) > 0 else 42.1
+        top2_name = df_agg.iloc[1]["Domain Feature"] if len(df_agg) > 1 else "AvgSessionDurationMinutes"
+        top2_val = df_agg.iloc[1]["Cumulative Gini"] if len(df_agg) > 1 else 37.4
+        combined_top = top1_val + top2_val
+
+        st.markdown(f"""
         <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 1.1rem; font-size: 0.88rem; line-height: 1.55; margin-top: 1rem;">
             <strong>🎯 Key Finding for Viva Defense:</strong><br>
-            • <strong>Telemetry Habits Dominate:</strong> <code>SessionsPerWeek</code> (42.1%) and <code>AvgSessionDurationMinutes</code> (37.4%) together represent <strong>~80% of total predictive power</strong>.<br>
+            • <strong>Telemetry Habits Dominate:</strong> <code>{top1_name}</code> ({top1_val:.1f}%) and <code>{top2_name}</code> ({top2_val:.1f}%) together represent <strong>~{combined_top:.0f}% of total predictive power</strong>.<br>
             • <strong>Demographics Are Negligible:</strong> Age, Gender, and Server Location account for &lt; 4% of Gini importance. Players from all backgrounds behave identically under strong engagement loops.
         </div>
         """, unsafe_allow_html=True)
@@ -824,7 +887,7 @@ with tab_analytics:
         st.markdown("#### Feature Importance Chart")
         feat_chart_file = Path("outputs/feature_importance_analysis.png")
         if feat_chart_file.exists():
-            st.image(str(feat_chart_file), caption="High-Resolution Feature Importance Ranking (Post-OneHotEncoding & Aggregated)", width="stretch")
+            st.image(str(feat_chart_file), caption="High-Resolution Feature Importance Ranking (Post-OneHotEncoding & Aggregated)", use_container_width=True)
         else:
             st.info("Feature importance plot artifact available in /outputs/feature_importance_analysis.png")
 
@@ -834,11 +897,11 @@ with tab_analytics:
     with col_d1:
         roc_file = Path("outputs/roc_pr_curves.png")
         if roc_file.exists():
-            st.image(str(roc_file), caption="ROC Curve (AUC = 0.9430) and Precision-Recall Curve", width="stretch")
+            st.image(str(roc_file), caption="ROC Curve (AUC = 0.9430) and Precision-Recall Curve", use_container_width=True)
     with col_d2:
         dist_file = Path("outputs/behavioral_feature_distributions.png")
         if dist_file.exists():
-            st.image(str(dist_file), caption="Behavioral Density Distribution by Retention Proxy Status", width="stretch")
+            st.image(str(dist_file), caption="Behavioral Density Distribution by Retention Proxy Status", use_container_width=True)
 
 # ==============================================================================
 # TAB 3: MODEL ARCHITECTURE & AUDIT
@@ -885,20 +948,37 @@ with tab_architecture:
         """, unsafe_allow_html=True)
         
     with col_arch2:
-        st.markdown("#### Holdout Test Evaluation Scorecard ($N = 8,007$)")
+        test_metrics = metadata.get("test_metrics", {})
+        holdout_count = metadata.get("testing_samples", 8007)
+        st.markdown(f"#### Holdout Test Evaluation Scorecard ($N = {holdout_count:,}$)")
+        
+        acc_v = test_metrics.get("accuracy", 0.94617)
+        prec_v = test_metrics.get("precision", 0.96553)
+        rec_v = test_metrics.get("recall", 0.96180)
+        f1_v = test_metrics.get("f1_score", 0.96366)
+        roc_v = test_metrics.get("roc_auc", 0.94301)
+        rec_risk_v = test_metrics.get("recall_at_risk", 0.90121)
+
         perf_data = {
             "Evaluation Metric": [
                 "Overall Accuracy", "Precision (Retained)", "Recall (Retained)", 
                 "F1-Score (Retained)", "Recall (At Risk Class)", "ROC-AUC Score"
             ],
-            "Score": ["94.62%", "96.55%", "96.18%", "96.37%", "90.12%", "0.9430"],
+            "Score": [
+                f"{acc_v * 100:.2f}%" if acc_v <= 1.0 else f"{acc_v:.2f}%",
+                f"{prec_v * 100:.2f}%" if prec_v <= 1.0 else f"{prec_v:.2f}%",
+                f"{rec_v * 100:.2f}%" if rec_v <= 1.0 else f"{rec_v:.2f}%",
+                f"{f1_v * 100:.2f}%" if f1_v <= 1.0 else f"{f1_v:.2f}%",
+                f"{rec_risk_v * 100:.2f}%" if rec_risk_v <= 1.0 else f"{rec_risk_v:.2f}%",
+                f"{roc_v:.4f}"
+            ],
             "Industry Benchmark": ["> 85.0%", "> 90.0%", "> 90.0%", "> 90.0%", "> 80.0%", "> 0.8500"]
         }
-        st.dataframe(pd.DataFrame(perf_data), width="stretch", hide_index=True)
+        st.dataframe(pd.DataFrame(perf_data), use_container_width=True, hide_index=True)
         
         cm_file = Path("outputs/confusion_matrix.png")
         if cm_file.exists():
-            st.image(str(cm_file), caption="Holdout Test Confusion Matrix (1,861 At-Risk Players Intercepted)", width="stretch")
+            st.image(str(cm_file), caption="Holdout Test Confusion Matrix (1,861 At-Risk Players Intercepted)", use_container_width=True)
 
 # ==============================================================================
 # TAB 4: ACADEMIC METHODOLOGY & VIVA DEFENSE GUIDE
