@@ -1,4 +1,4 @@
-# AI-Based Online Gaming Player Retention Prediction Using Random Forest
+# AI Based Online Gaming Player Retention Prediction Using Random Forest
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.30%2B-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
