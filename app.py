@@ -844,8 +844,8 @@ with tab_simulator:
                 
                 st.dataframe(
                     comparison_df[["Telemetry Metric", "Player Input", "Global Dataset Mean", "Status"]],
-                    use_container_width=True,
-                    hide_index=True
+                    hide_index=True,
+                    **_stretch_kwargs(st.dataframe)
                 )
                 
         except Exception as e:
@@ -865,8 +865,8 @@ with tab_analytics:
         df_agg = get_domain_feature_importance(pipeline, metadata)
         st.dataframe(
             df_agg.style.format({"Cumulative Gini": "{:.2f}%"}),
-            use_container_width=True,
-            hide_index=True
+            hide_index=True,
+            **_stretch_kwargs(st.dataframe)
         )
         
         top1_name = df_agg.iloc[0]["Domain Feature"] if len(df_agg) > 0 else "SessionsPerWeek"
