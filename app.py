@@ -1266,12 +1266,26 @@ if st.session_state["current_page"] == "Player Simulator":
 
                 # 3. Dual Probability Balance Progress Bars
                 st.markdown(f"#### <span style='display:inline-flex; align-items:center; gap:0.45rem;'>{svg_icon('scale', '#7DD3FC', 18)} Retention vs. Churn Hazard Probability Balance</span>", unsafe_allow_html=True)
-                cp1, cp2 = st.columns([prob_retained if prob_retained > 0 else 0.01, prob_risk if prob_risk > 0 else 0.01])
-                with cp1:
-                    st.progress(prob_retained / 100.0, text=f"Retained Probability: {prob_retained:.1f}%")
-                with cp2:
-                    st.progress(prob_risk / 100.0, text=f"Churn Hazard: {prob_risk:.1f}%")
-
+                retained_color = "#62D6A5"
+                risk_color = "#FF5B55"
+                st.markdown(f"""
+                <div style="margin: 0.75rem 0 0.5rem 0;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+                        <span style="font-size:0.84rem; font-weight:600; color:{retained_color}; white-space:nowrap;">&#x2713; Retained: {prob_retained:.1f}%</span>
+                        <span style="font-size:0.84rem; font-weight:600; color:{risk_color}; white-space:nowrap;">&#x26a0; Churn Hazard: {prob_risk:.1f}%</span>
+                    </div>
+                    <div style="width:100%; background:#1B2028; border-radius:8px; height:16px; overflow:hidden; border:1px solid #2A3039;">
+                        <div style="display:flex; height:100%;">
+                            <div style="width:{max(prob_retained, 0.5):.2f}%; background:{retained_color}; border-radius:8px 0 0 8px; transition:width 0.4s ease;"></div>
+                            <div style="width:{max(prob_risk, 0.5):.2f}%; background:{risk_color}; border-radius:0 8px 8px 0; transition:width 0.4s ease;"></div>
+                        </div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-top:0.35rem;">
+                        <span style="font-size:0.72rem; color:#747F8F;">Engaged &amp; Active</span>
+                        <span style="font-size:0.72rem; color:#747F8F;">Disengagement Risk</span>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
                 # 4. LiveOps Action Plan & Benchmark Comparison
                 c_act, c_bench = st.columns([1.1, 1])
 
