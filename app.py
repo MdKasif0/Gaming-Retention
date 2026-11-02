@@ -8,7 +8,6 @@ import numpy as np
 import joblib
 import plotly.graph_objects as go
 import plotly.express as px
-from build_sequence import get_build_sequence_html
 
 # ==============================================================================
 # 1. STREAMLIT CONFIGURATION & CROSS-VERSION COMPATIBILITY
@@ -19,23 +18,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-
-# ==============================================================================
-# MULTI-AGENT CURSOR UI ASSEMBLY SIMULATION (THE BUILD SEQUENCE)
-# ==============================================================================
-if "trigger_build_replay" not in st.session_state:
-    st.session_state["trigger_build_replay"] = False
-
-is_replay = st.session_state["trigger_build_replay"]
-if is_replay:
-    st.session_state["trigger_build_replay"] = False
-
-_build_seq_html = get_build_sequence_html(clear_storage=is_replay)
-if hasattr(st, "html"):
-    st.html(_build_seq_html, unsafe_allow_javascript=True)
-else:
-    import streamlit.components.v1 as _components
-    _components.html(_build_seq_html, height=0)
 
 def _stretch_kwargs(widget_func):
     """
@@ -549,29 +531,6 @@ st.markdown("""
         background: linear-gradient(135deg, #FF6B65 0%, #E84C46 100%) !important;
     }
 
-    /* Sidebar Secondary Replay Button */
-    section[data-testid="stSidebar"] div.stButton > button {
-        background: rgba(229, 9, 20, 0.08) !important;
-        border: 1px solid rgba(229, 9, 20, 0.3) !important;
-        color: #FF5B55 !important;
-        font-family: 'Inter', sans-serif !important;
-        font-size: 0.8rem !important;
-        font-weight: 600 !important;
-        padding: 0.45rem 0.8rem !important;
-        border-radius: 8px !important;
-        box-shadow: none !important;
-        margin-top: 0 !important;
-        transition: all 0.2s ease !important;
-    }
-
-    section[data-testid="stSidebar"] div.stButton > button:hover {
-        background: rgba(229, 9, 20, 0.18) !important;
-        border-color: #FF5B55 !important;
-        color: #FFFFFF !important;
-        box-shadow: 0 0 14px rgba(255, 91, 85, 0.35) !important;
-        transform: translateY(-1px) !important;
-    }
-
     /* Results Empty State Card */
     .gp-empty-state-card {
         background: #101318;
@@ -1003,14 +962,8 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-    # Replay Build Sequence Control
-    st.markdown('<div style="margin-top: 1.4rem;"></div>', unsafe_allow_html=True)
-    if st.button("↺  Replay Build Sequence", key="btn_replay_build_seq", help="Replay the multi-agent UI assembly cinematic animation", use_container_width=True):
-        st.session_state["trigger_build_replay"] = True
-        st.rerun()
-
     # Sidebar Attribution Footer
-    st.markdown('<div style="margin-top: 1.2rem;"></div>', unsafe_allow_html=True)
+    st.markdown('<div style="margin-top: 2rem;"></div>', unsafe_allow_html=True)
     st.markdown(f"""
     <div style="display:flex; align-items:center; gap:0.45rem; color:#747F8F; font-size:0.74rem; line-height:1.45; padding-left: 0.2rem;">
         {svg_icon('graduation', '#747F8F', 16)}
