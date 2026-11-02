@@ -1518,10 +1518,10 @@ def get_build_sequence_html(clear_storage: bool = False) -> str:
   const TOTAL_MS = 10800;
 
   const TL_RANGES = {{
-    ui:     [0.10, 0.48],
-    data:   [0.42, 0.72],
-    tensor: [0.60, 0.84],
-    qa:     [0.78, 0.96]
+    ui:     [0.10, 0.78],
+    data:   [0.12, 0.82],
+    tensor: [0.10, 0.80],
+    qa:     [0.15, 0.92]
   }};
 
   function updateTimeline() {{
@@ -1573,184 +1573,227 @@ def get_build_sequence_html(clear_storage: bool = False) -> str:
   }}
 
   // ─────────────────────────────────────────────
-  // 6. MAIN CHOREOGRAPHED SEQUENCE
+  // 6. FOUR PARALLEL AGENT EXECUTION TRACKS
   // ─────────────────────────────────────────────
-  async function runSequence() {{
-    // ── STAGE 01: BOOT INITIALIZATION (0 – 1.1s)
-    await wait(1100);
-    document.getElementById('gp-timeline').classList.add('show');
-    tlStart = performance.now();
-    requestAnimationFrame(updateTimeline);
-    document.getElementById('gp-boot').classList.add('hide');
-    await wait(350);
-
-    // ── STAGE 02: AGENT ENTRANCE (1.1 – 2.2s)
-    document.getElementById('gp-sim-ui').classList.add('show');
-
-    // PIXEL arrives from top-left
-    showAgent('pixel', -4, -4);
-    moveAgent('pixel', 8, 12, 540);
-    await wait(120);
-
-    // SIGNAL arrives from top-right
-    showAgent('signal', 104, 18);
-    moveAgent('signal', 58, 22, 600);
-    await wait(100);
-
-    // TENSOR arrives from bottom-left
-    showAgent('tensor', -4, 85);
-    moveAgent('tensor', 78, 65, 620);
-    await wait(100);
-
-    // PULSE arrives from bottom-right
-    showAgent('pulse', 104, 90);
-    moveAgent('pulse', 88, 82, 580);
-    await wait(600);
-
-    // ── STAGE 03: PIXEL ASSEMBLES SIDEBAR & NAV (2.2 – 4.2s)
-    await moveAgent('pixel', 5, 18, 420);
+  async function runPixel() {{
+    // 1. Sidebar Structure
+    await moveAgent('pixel', 5, 16, 440);
     clickAgent('pixel');
     document.getElementById('gp-sim-sidebar').classList.add('reveal');
-    await wait(180);
+    await wait(120);
 
-    // Nav items reveal in rapid sequence
+    // Nav items stagger
     for (let i = 0; i <= 4; i++) {{
       const navItem = document.getElementById(`gp-nav-${{i}}`);
       if (navItem) navItem.classList.add('vis');
-      await wait(80);
+      await wait(65);
     }}
 
-    // Preset & status card in sidebar
-    await moveAgent('pixel', 7, 52, 380);
-    clickAgent('pixel');
-    document.getElementById('gp-preset-box').classList.add('vis');
-    document.getElementById('gp-preset-cap').classList.add('vis');
-    await wait(160);
-
-    await moveAgent('pixel', 7, 74, 380);
-    clickAgent('pixel');
-    document.getElementById('gp-sb-status').classList.add('vis');
-    await wait(180);
-
-    // ── STAGE 04: TOP HEADER & PAGE HEADER (4.2 – 5.6s)
-    await moveAgent('pixel', 52, 3, 420);
+    // 2. Global Top Header
+    await moveAgent('pixel', 48, 3, 420);
     clickAgent('pixel');
     document.getElementById('gp-sim-header').classList.add('reveal');
-    await wait(160);
+    await wait(120);
 
+    // 3. Main Stage Title & Badge
     document.getElementById('gp-sim-main').classList.add('show');
     await moveAgent('pixel', 32, 11, 380);
     clickAgent('pixel');
     document.getElementById('gp-title').classList.add('reveal');
     document.getElementById('gp-sub').classList.add('reveal');
     document.getElementById('gp-tag').classList.add('reveal');
-    await wait(120);
+    await wait(140);
 
     document.getElementById('gp-info-card').classList.add('reveal');
-    await wait(150);
+    await wait(140);
 
-    await moveAgent('pixel', 42, 23, 340);
+    // 4. Alert Banner
+    await moveAgent('pixel', 40, 23, 340);
     clickAgent('pixel');
     document.getElementById('gp-alert').classList.add('reveal');
-    await wait(200);
+    await wait(180);
 
-    // ── STAGE 05: 3-COLUMN MASTER CARD DRAW (5.6 – 6.6s)
+    // 5. 3-Column Master Form Card
     await moveAgent('pixel', 55, 34, 380);
     clickAgent('pixel');
     document.getElementById('gp-form-card').classList.add('reveal');
-    await wait(300);
+    await wait(240);
 
-    // Move PIXEL to top-center as observer
-    moveAgent('pixel', 42, 16, 420);
+    // 6. Layout Spacing Refinement
+    await moveAgent('pixel', 45, 16, 500);
+    clickAgent('pixel');
+    await wait(350);
+    await moveAgent('pixel', 26, 12, 460);
+  }}
 
-    // ── STAGE 06: SIGNAL CONFIGURES PROFILE & BEHAVIOR SLIDERS (6.6 – 8.6s)
-    // Column 1 inputs
-    await moveAgent('signal', 32, 45, 380);
+  async function runSignal() {{
+    // Signal acts simultaneously on inputs
+    await wait(800);
+
+    // Column 1: Player Profile inputs
+    await moveAgent('signal', 32, 45, 460);
     clickAgent('signal');
     document.getElementById('gp-val-age').textContent = '30';
-    await wait(90);
+    await wait(120);
 
-    await moveAgent('signal', 32, 57, 320);
+    await moveAgent('signal', 32, 57, 340);
     clickAgent('signal');
-    await wait(90);
+    await wait(120);
 
-    await moveAgent('signal', 32, 69, 300);
+    await moveAgent('signal', 32, 69, 320);
     clickAgent('signal');
-    await wait(90);
+    await wait(120);
 
-    await moveAgent('signal', 32, 81, 300);
+    await moveAgent('signal', 32, 81, 320);
+    clickAgent('signal');
+    await wait(180);
+
+    // Column 2: Play Behavior Sliders
+    // Slider 1: Weekly Playtime (drag 0 to 12.00 hrs)
+    await moveAgent('signal', 48, 48, 360);
+    const drag1 = animateSlider('gp-val-playtime', 'gp-sf-playtime', 'gp-st-playtime', 12.00, 50, 560);
+    await moveAgent('signal', 56, 48, 560);
+    await drag1;
     clickAgent('signal');
     await wait(140);
 
-    // Column 2: Drag Weekly Playtime slider from 0 to 12.00 hrs
-    await moveAgent('signal', 48, 48, 380);
-    const drag1 = animateSlider('gp-val-playtime', 'gp-sf-playtime', 'gp-st-playtime', 12.00, 50, 520);
-    await moveAgent('signal', 56, 48, 520);
-    await drag1;
-    clickAgent('signal');
-    await wait(100);
-
-    // Column 2: Drag Weekly Sessions slider to 9
+    // Slider 2: Weekly Sessions (drag to 9)
     await moveAgent('signal', 48, 62, 340);
-    const drag2 = animateSlider('gp-val-sess', 'gp-sf-sess', 'gp-st-sess', 9, 47, 440);
-    await moveAgent('signal', 55, 62, 440);
+    const drag2 = animateSlider('gp-val-sess', 'gp-sf-sess', 'gp-st-sess', 9, 47, 480);
+    await moveAgent('signal', 55, 62, 480);
     await drag2;
     clickAgent('signal');
-    await wait(100);
+    await wait(140);
 
-    // Column 2: Drag Avg Session Duration slider to 95
+    // Slider 3: Avg Session Duration (drag to 95)
     await moveAgent('signal', 48, 76, 340);
-    const drag3 = animateSlider('gp-val-dur', 'gp-sf-dur', 'gp-st-dur', 95, 53, 440);
-    await moveAgent('signal', 56, 76, 440);
+    const drag3 = animateSlider('gp-val-dur', 'gp-sf-dur', 'gp-st-dur', 95, 53, 480);
+    await moveAgent('signal', 56, 76, 480);
     await drag3;
     clickAgent('signal');
-    await wait(120);
+    await wait(220);
 
-    // ── STAGE 07: TENSOR CONFIGURES PROGRESSION & MONETIZATION (7.2 – 8.8s in parallel)
-    await moveAgent('tensor', 78, 45, 380);
+    // Signal fine-tunes Column 2 telemetry lock
+    await moveAgent('signal', 52, 54, 400);
+    clickAgent('signal');
+  }}
+
+  async function runTensor() {{
+    // Tensor works simultaneously on Preset, Status, & Progression
+    await wait(600);
+
+    // 1. Assembles Sidebar Preset & Model Status
+    await moveAgent('tensor', 7, 52, 440);
     clickAgent('tensor');
-    await wait(120);
+    document.getElementById('gp-preset-box').classList.add('vis');
+    document.getElementById('gp-preset-cap').classList.add('vis');
+    await wait(160);
+
+    await moveAgent('tensor', 7, 74, 400);
+    clickAgent('tensor');
+    document.getElementById('gp-sb-status').classList.add('vis');
+    await wait(260);
+
+    // 2. Glides across to Column 3 (Progression & Monetization)
+    await moveAgent('tensor', 78, 45, 500);
+    clickAgent('tensor');
+    await wait(140);
 
     // Clicks Non-Spender radio button
     await moveAgent('tensor', 75, 58, 360);
     clickAgent('tensor');
     document.getElementById('gp-rad-1').classList.add('selected');
-    await wait(150);
+    await wait(180);
 
     // Sets Level to 50
     await moveAgent('tensor', 78, 70, 320);
     clickAgent('tensor');
     document.getElementById('gp-val-lvl').textContent = '50';
-    await wait(120);
+    await wait(140);
 
     // Sets Achievements to 25
     await moveAgent('tensor', 78, 82, 320);
     clickAgent('tensor');
     document.getElementById('gp-val-ach').textContent = '25';
-    await wait(150);
+    await wait(200);
 
-    // ── STAGE 08: PULSE QA INSPECTION PASS (8.8 – 9.8s)
-    await moveAgent('pulse', 32, 38, 380);
+    // Model telemetry link
+    await moveAgent('tensor', 72, 60, 420);
+    clickAgent('tensor');
+  }}
+
+  async function runPulse() {{
+    // Pulse sweeps across all columns conducting QA checks simultaneously
+    await wait(1600);
+
+    // 1. Validates Column 1 (Player Profile)
+    await moveAgent('pulse', 30, 36, 440);
     clickAgent('pulse');
-    spawnQAChip(28, 32, 'Profile Schema 4/4 ✓');
-    await wait(180);
+    spawnQAChip(26, 30, 'Profile Schema 4/4 ✓');
+    await wait(420);
 
-    await moveAgent('pulse', 54, 38, 360);
+    // 2. Validates Column 2 (Sliders & Behavior)
+    await moveAgent('pulse', 52, 36, 420);
     clickAgent('pulse');
-    spawnQAChip(50, 32, 'Sliders Calibrated 100% ✓');
-    await wait(180);
+    spawnQAChip(48, 30, 'Sliders Calibrated 100% ✓');
+    await wait(460);
 
-    await moveAgent('pulse', 78, 38, 360);
+    // 3. Validates Column 3 (Progression & Monetization)
+    await moveAgent('pulse', 76, 36, 420);
     clickAgent('pulse');
-    spawnQAChip(74, 32, 'Monetization Vectors Bound ✓');
-    await wait(180);
+    spawnQAChip(72, 30, 'Monetization Vectors Bound ✓');
+    await wait(460);
 
+    // 4. Validates Overall Accessibility Contrast
+    await moveAgent('pulse', 62, 10, 400);
+    clickAgent('pulse');
+    spawnQAChip(58, 6, 'Contrast Ratio: 8.4:1 AAA ✓');
+    await wait(480);
+
+    // 5. Crown button reveals; Pulse glides to it
     document.getElementById('gp-crown-float').classList.add('reveal');
-    await wait(150);
+    await moveAgent('pulse', 95, 93, 520);
+  }}
 
-    // ── STAGE 09: GO LIVE SHOCKWAVE & SEAMLESS REVEAL (9.8 – 10.8s)
-    // PULSE glides to crown badge and triggers activation!
-    await moveAgent('pulse', 95, 93, 440);
+  // ─────────────────────────────────────────────
+  // 7. ORCHESTRATED MAIN SEQUENCE
+  // ─────────────────────────────────────────────
+  async function runSequence() {{
+    // ── STAGE 01: BOOT INITIALIZATION (0 – 1.0s)
+    await wait(1000);
+    document.getElementById('gp-timeline').classList.add('show');
+    tlStart = performance.now();
+    requestAnimationFrame(updateTimeline);
+    document.getElementById('gp-boot').classList.add('hide');
+    await wait(300);
+
+    // ── STAGE 02: ALL 4 AGENTS ENTER SIMULTANEOUSLY (1.0 – 1.8s)
+    document.getElementById('gp-sim-ui').classList.add('show');
+
+    showAgent('pixel',  -4, -4);
+    showAgent('signal', 104, 18);
+    showAgent('tensor', -4, 85);
+    showAgent('pulse',  104, 90);
+
+    // Simultaneous 4-agent entrance sweep!
+    await Promise.all([
+      moveAgent('pixel',   6, 14, 520),
+      moveAgent('signal', 40, 42, 560),
+      moveAgent('tensor', 12, 60, 580),
+      moveAgent('pulse',  64, 40, 540)
+    ]);
+
+    // ── STAGE 03: SIMULTANEOUS 4-AGENT CONSTRUCTION (1.8 – 9.2s)
+    // All 4 agents work concurrently across the entire interface!
+    await Promise.all([
+      runPixel(),
+      runSignal(),
+      runTensor(),
+      runPulse()
+    ]);
+
+    // ── STAGE 04: GO LIVE SHOCKWAVE & SEAMLESS REVEAL (9.2 – 10.4s)
+    // Pulse activates the live trigger
     clickAgent('pulse');
 
     // Trigger shockwave and lights-on flash
@@ -1760,16 +1803,16 @@ def get_build_sequence_html(clear_storage: bool = False) -> str:
     shock.classList.add('fire');
     document.getElementById('gp-lights-flash').classList.add('fire');
 
-    // Synchronized agent departure flourish
-    moveAgent('pixel',  -10, -10, 520);
-    moveAgent('signal', 110, -10, 540);
-    moveAgent('tensor', 110, 110, 520);
-    moveAgent('pulse',   -10, 110, 560);
+    // Synchronized 4-corner departure flourish in parallel!
+    await Promise.all([
+      moveAgent('pixel',  -10, -10, 480),
+      moveAgent('signal', 110, -10, 500),
+      moveAgent('tensor', 110, 110, 480),
+      moveAgent('pulse',   -10, 110, 520)
+    ]);
 
-    await wait(480);
     ['pixel','signal','tensor','pulse'].forEach(hideAgent);
-
-    await wait(520);
+    await wait(480);
     dismiss(false);
   }}
 
