@@ -1473,7 +1473,12 @@ def get_build_sequence_html(clear_storage: bool = False) -> str:
   function spawnQAChip(x, y, text) {{
     const chip = document.createElement('div');
     chip.className = 'gp-qa-chip';
-    chip.innerHTML = `<span>✓</span><span>${{text}}</span>`;
+    const s1 = document.createElement('span');
+    s1.textContent = '✓';
+    const s2 = document.createElement('span');
+    s2.textContent = text;
+    chip.appendChild(s1);
+    chip.appendChild(s2);
     chip.style.left = vw(x) + 'px';
     chip.style.top  = vh(y) + 'px';
     overlay.appendChild(chip);
