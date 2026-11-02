@@ -1347,6 +1347,8 @@ def get_build_sequence_html(clear_storage: bool = False) -> str:
 </div>
 
 <script>
+console.log("=== SCRIPT EXECUTING NOW ===");
+
 (function() {{
   'use strict';
 
