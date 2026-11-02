@@ -15,7 +15,7 @@ def get_build_sequence_html(clear_storage: bool = False) -> str:
         clear_storage: If True, clears localStorage so animation replays even on
                        returning visitors.
     """
-    clear_js = "try{localStorage.removeItem('gp_intro_v2');}catch(e){}" if clear_storage else ""
+    clear_js = "try{sessionStorage.removeItem('gp_intro_v2');localStorage.removeItem('gp_intro_v2');}catch(e){}" if clear_storage else ""
 
     return f"""
 <!-- GamePulse Build Sequence v3.0 — Precision Simulation -->
@@ -1347,8 +1347,6 @@ def get_build_sequence_html(clear_storage: bool = False) -> str:
 </div>
 
 <script>
-console.log("=== SCRIPT EXECUTING NOW ===");
-
 (function() {{
   'use strict';
 
@@ -1363,7 +1361,7 @@ console.log("=== SCRIPT EXECUTING NOW ===");
     if (fast) {{
       if (ov.parentNode) ov.remove();
       cleanup();
-      try {{ localStorage.setItem('gp_intro_v2', 'done'); }} catch(e) {{}}
+      try {{ sessionStorage.setItem('gp_intro_v2', 'done'); localStorage.setItem('gp_intro_v2', 'done'); }} catch(e) {{}}
       return;
     }}
     ov.style.transition = 'opacity 0.65s ease';
@@ -1373,11 +1371,11 @@ console.log("=== SCRIPT EXECUTING NOW ===");
       if (ov.parentNode) ov.remove();
       cleanup();
     }}, 700);
-    try {{ localStorage.setItem('gp_intro_v2', 'done'); }} catch(e) {{}}
+    try {{ sessionStorage.setItem('gp_intro_v2', 'done'); localStorage.setItem('gp_intro_v2', 'done'); }} catch(e) {{}}
   }}
 
   try {{
-    if (localStorage.getItem('gp_intro_v2') === 'done' && !{str(clear_storage).lower()}) {{
+    if (sessionStorage.getItem('gp_intro_v2') === 'done' && !{str(clear_storage).lower()}) {{
       dismiss(true);
       return;
     }}
