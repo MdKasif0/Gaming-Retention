@@ -968,8 +968,7 @@ with st.sidebar:
     <div style="display:flex; align-items:center; gap:0.45rem; color:#747F8F; font-size:0.74rem; line-height:1.45; padding-left: 0.2rem;">
         {svg_icon('graduation', '#747F8F', 16)}
         <div>
-            Academic ML Project · 2026<br>
-            <span style="color:#A6AFBD; font-weight:600;">Md Kasif Uddin</span>
+            Academic ML Project · 2026
         </div>
     </div>
     """, unsafe_allow_html=True)
