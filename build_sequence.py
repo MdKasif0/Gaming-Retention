@@ -15,7 +15,7 @@ def get_build_sequence_html(clear_storage: bool = False) -> str:
         clear_storage: If True, clears localStorage so animation replays even on
                        returning visitors.
     """
-    clear_js = "try{sessionStorage.removeItem('gp_intro_v2');localStorage.removeItem('gp_intro_v2');}catch(e){}" if clear_storage else ""
+    clear_js = "window.__gp_intro_played = false;" if clear_storage else ""
 
     return f"""
 <!-- GamePulse Build Sequence v3.0 — Precision Simulation -->
@@ -1351,9 +1351,13 @@ def get_build_sequence_html(clear_storage: bool = False) -> str:
   'use strict';
 
   // ─────────────────────────────────────────────
-  // 0. FIRST-VISIT & REDUCED MOTION CHECKS
+  // 0. ONCE PER PAGE LOAD & MOTION CHECKS
   // ─────────────────────────────────────────────
-  {clear_js}
+  if (window.__gp_intro_played && !{str(clear_storage).lower()}) {{
+    dismiss(true);
+    return;
+  }}
+  window.__gp_intro_played = true;
 
   function dismiss(fast) {{
     const ov = document.getElementById('gp-overlay');
@@ -1361,7 +1365,6 @@ def get_build_sequence_html(clear_storage: bool = False) -> str:
     if (fast) {{
       if (ov.parentNode) ov.remove();
       cleanup();
-      try {{ sessionStorage.setItem('gp_intro_v2', 'done'); localStorage.setItem('gp_intro_v2', 'done'); }} catch(e) {{}}
       return;
     }}
     ov.style.transition = 'opacity 0.65s ease';
@@ -1371,15 +1374,7 @@ def get_build_sequence_html(clear_storage: bool = False) -> str:
       if (ov.parentNode) ov.remove();
       cleanup();
     }}, 700);
-    try {{ sessionStorage.setItem('gp_intro_v2', 'done'); localStorage.setItem('gp_intro_v2', 'done'); }} catch(e) {{}}
   }}
-
-  try {{
-    if (sessionStorage.getItem('gp_intro_v2') === 'done' && !{str(clear_storage).lower()}) {{
-      dismiss(true);
-      return;
-    }}
-  }} catch(e) {{}}
 
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {{
     dismiss(true);
