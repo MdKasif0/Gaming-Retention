@@ -1,7 +1,7 @@
 # GamePulse
 ### AI-Powered Gaming Retention Intelligence Platform
 
-[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.30%2B-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-Machine%20Learning-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
 [![Plotly](https://img.shields.io/badge/Plotly-Interactive%20Charts-3F4F75?logo=plotly&logoColor=white)](https://plotly.com/)
@@ -46,7 +46,7 @@ Evaluated on an **untouched holdout test set** ($N = 8,007$ players, $20\%$ stra
 | **Retained F1-Score** | **96.37%** | > 90.0% | Harmonized balance across active players. |
 | **At-Risk Recall (Class 0)** | **90.12%** | > 80.0% | **1,861 of 2,065 at-risk players correctly intercepted.** |
 | **ROC-AUC Score** | **0.9430** | > 0.850 | High discriminative threshold separation. |
-| **Inference Latency** | **< 15 ms** | < 50 ms | Sub-millisecond live inference speed. |
+| **Inference Latency** | **~15 ms** | < 50 ms | Median single-player prediction on a laptop CPU (measured live in the app sidebar). |
 
 ---
 
@@ -149,9 +149,10 @@ ColumnTransformer
 | :---: | :---: |
 | ![Confusion Matrix](outputs/confusion_matrix.png) | ![ROC PR Curves](outputs/roc_pr_curves.png) |
 
-- **True Positives (Retained):** 5,715 players ($96.2\%$).
-- **True Positives (At Risk):** 1,861 players intercepted ($90.12\%$).
-- **False Alarms:** 204 active players ($9.9\%$), causing minimal LiveOps disruption.
+- **Correctly Retained:** 5,715 of 5,942 retained players ($96.2\%$).
+- **Correctly Flagged At Risk:** 1,861 of 2,065 at-risk players intercepted ($90.12\%$).
+- **Missed At-Risk Players (False Negatives):** 204 at-risk players predicted as retained ($9.9\%$ of at-risk).
+- **False Alarms (False Positives):** 227 retained players flagged as at risk ($3.8\%$ of retained), causing minimal LiveOps disruption.
 
 ---
 
@@ -168,7 +169,7 @@ Aggregating one-hot dummy levels back into conceptual domain features reveals th
 | 3 | `PlayerLevel` | Progression | **5.67%** | Mastery and sunk-cost investment. |
 | 4 | `AchievementsUnlocked` | Gamification| **5.16%** | Completionist motivation. |
 | 5 | `PlayTimeHours` | Telemetry | **3.79%** | Weekly playtime accumulation. |
-| 6–11 | Age, Genre, Region, Difficulty, Gender, Purchases | Various | **< 6.0% combined** | Demographics are negligible once gameplay habits form. |
+| 6–11 | Age, Genre, Region, Difficulty, Gender, Purchases | Various | **≈ 5.9% combined** | Demographics are negligible once gameplay habits form. |
 
 ---
 
@@ -181,7 +182,7 @@ GamePulse Platform
  ├── Refined Sidebar:
  │    ├── Brand Identity (Waveform Pulse Logo + Wordmark)
  │    ├── Workspace Navigation (Radio: Simulator, Analytics, Audit, Viva)
- │    ├── Player Presets (Veteran, Disengaged, Casual, Custom)
+ │    ├── Player Presets (Veteran, Disengaged, Threshold, Custom)
  │    ├── Live Health Status Card (Tree count, F1-score, ROC-AUC, Measured Latency)
  │    └── Academic Attribution Footer
  ├── Global Header Bar:
@@ -190,9 +191,9 @@ GamePulse Platform
  └── 4 Dedicated Workspaces:
       ├── 1. Player Simulator:
       │    ├── 3 Balanced Input Panels (Profile, Play Behavior, Progression)
-      │    ├── Coral CTA ("⚡ Analyze Player Engagement →")
-      │    ├── Dynamic Decision Banner (Low, Medium, High Tiers)
-      │    ├── 4 Executive Metric Cards (Cohort, Retention %, Risk %, Confidence %)
+      │    ├── Coral CTA ("Analyze Player Engagement")
+      │    ├── Decision Banner (Retained / At Risk, strong vs borderline signal)
+      │    ├── 4 Executive Metric Cards (Class, Retention %, At-Risk %, Confidence %)
       │    ├── Dual Probability Balance Visualizer
       │    ├── Tailored LiveOps Strategic Action Plans
       │    └── Telemetry vs Baseline Benchmark Variance Table

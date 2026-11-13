@@ -70,19 +70,23 @@ def svg_icon(name, color="#FF5B55", size=20, stroke=2):
 # 3. BESPOKE GAMEPULSE DESIGN SYSTEM (DARK ANALYTICS PALETTE)
 # ==============================================================================
 st.markdown("""
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
 <style>
-    /* Global Base Reset & Typography */
-    html, body, [class*="css"], .stMarkdown, .stText, p, span, div {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    /* Global Base Typography.
+       System font stack (no third-party font requests). Inter / JetBrains Mono are
+       used only if installed locally. Icon fonts are deliberately NOT overridden:
+       a blanket `span, div { font-family: ... !important }` turns Streamlit's
+       Material icons into literal text such as "arrow_down". */
+    html, body, .stApp {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         color: #F5F7FA;
     }
 
     code, pre {
-        font-family: 'JetBrains Mono', monospace !important;
+        font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+    }
+
+    [data-testid="stIconMaterial"], .material-symbols-rounded {
+        font-family: 'Material Symbols Rounded' !important;
     }
 
     /* Core Canvas Background */
@@ -159,7 +163,7 @@ st.markdown("""
         font-size: 0.68rem;
         font-weight: 700;
         letter-spacing: 0.12em;
-        color: #747F8F;
+        color: #8A94A3;
         text-transform: uppercase;
         margin-top: 3px;
     }
@@ -169,7 +173,7 @@ st.markdown("""
         font-size: 0.72rem;
         font-weight: 700;
         letter-spacing: 0.08em;
-        color: #747F8F;
+        color: #8A94A3;
         text-transform: uppercase;
         margin-top: 1rem;
         margin-bottom: 0.5rem;
@@ -178,41 +182,48 @@ st.markdown("""
         gap: 0.45rem;
     }
 
-    /* Custom Radio Navigation Styling in Sidebar with Vector SVGs */
-    div[data-testid="stRadio"] > div {
+    /* Sidebar Workspace Navigation.
+       Scoped to the sidebar's radio *options* only, so the main-page radios
+       (e.g. In-Game Purchases) and the collapsed widget label are untouched. */
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] {
         gap: 0.35rem !important;
     }
 
-    div[data-testid="stRadio"] label {
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label {
         background: transparent !important;
         border: 1px solid transparent !important;
         border-radius: 8px !important;
         padding: 0.55rem 0.85rem !important;
         margin: 0 !important;
         cursor: pointer !important;
-        transition: all 0.18s ease !important;
+        transition: background 0.18s ease, border-color 0.18s ease !important;
         display: flex !important;
         align-items: center !important;
     }
 
-    div[data-testid="stRadio"] label:hover {
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:hover {
         background: rgba(255, 255, 255, 0.04) !important;
         border-color: #2A3039 !important;
     }
 
-    div[data-testid="stRadio"] label[data-checked="true"] {
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:has(input:checked) {
         background: rgba(255, 91, 85, 0.12) !important;
         border: 1px solid rgba(255, 91, 85, 0.4) !important;
         border-left: 3px solid #FF5B55 !important;
     }
 
-    div[data-testid="stRadio"] label[data-checked="true"] p {
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:has(input:checked) p {
         color: #FFFFFF !important;
         font-weight: 600 !important;
     }
 
-    /* Vector SVG Navigation Icons injected before radio label text */
-    div[data-testid="stRadio"] label:nth-of-type(1) p::before {
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:focus-within {
+        outline: 2px solid #7DD3FC;
+        outline-offset: 2px;
+    }
+
+    /* Vector SVG Navigation Icons injected before radio option text */
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label p::before {
         content: '';
         display: inline-block;
         width: 17px;
@@ -221,42 +232,21 @@ st.markdown("""
         vertical-align: -2px;
         background-size: contain;
         background-repeat: no-repeat;
+    }
+
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:nth-of-type(1) p::before {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23FF5B55' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='6' y1='12' x2='10' y2='12'/%3E%3Cline x1='8' y1='10' x2='8' y2='14'/%3E%3Cline x1='15' y1='13' x2='15.01' y2='13'/%3E%3Cline x1='18' y1='11' x2='18.01' y2='11'/%3E%3Crect x='2' y='6' width='20' height='12' rx='6'/%3E%3C/svg%3E");
     }
 
-    div[data-testid="stRadio"] label:nth-of-type(2) p::before {
-        content: '';
-        display: inline-block;
-        width: 17px;
-        height: 17px;
-        margin-right: 9px;
-        vertical-align: -2px;
-        background-size: contain;
-        background-repeat: no-repeat;
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:nth-of-type(2) p::before {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%237DD3FC' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='20' x2='18' y2='10'/%3E%3Cline x1='12' y1='20' x2='12' y2='4'/%3E%3Cline x1='6' y1='20' x2='6' y2='14'/%3E%3C/svg%3E");
     }
 
-    div[data-testid="stRadio"] label:nth-of-type(3) p::before {
-        content: '';
-        display: inline-block;
-        width: 17px;
-        height: 17px;
-        margin-right: 9px;
-        vertical-align: -2px;
-        background-size: contain;
-        background-repeat: no-repeat;
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:nth-of-type(3) p::before {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23C7F36B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='4' width='16' height='16' rx='2'/%3E%3Crect x='9' y='9' width='6' height='6'/%3E%3Cline x1='9' y1='1' x2='9' y2='4'/%3E%3Cline x1='15' y1='1' x2='15' y2='4'/%3E%3Cline x1='9' y1='20' x2='9' y2='23'/%3E%3Cline x1='15' y1='20' x2='15' y2='23'/%3E%3Cline x1='20' y1='9' x2='23' y2='9'/%3E%3Cline x1='20' y1='14' x2='23' y2='14'/%3E%3Cline x1='1' y1='9' x2='4' y2='9'/%3E%3Cline x1='1' y1='14' x2='4' y2='14'/%3E%3C/svg%3E");
     }
 
-    div[data-testid="stRadio"] label:nth-of-type(4) p::before {
-        content: '';
-        display: inline-block;
-        width: 17px;
-        height: 17px;
-        margin-right: 9px;
-        vertical-align: -2px;
-        background-size: contain;
-        background-repeat: no-repeat;
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:nth-of-type(4) p::before {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23F3C969' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/%3E%3Cpath d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/%3E%3C/svg%3E");
     }
 
@@ -351,14 +341,22 @@ st.markdown("""
     /* Contextual Page Header */
     .gp-page-header {
         display: flex;
+        flex-wrap: wrap;
         align-items: flex-start;
         justify-content: space-between;
         margin-bottom: 1.5rem;
         gap: 1.5rem;
     }
 
+    @media (max-width: 1100px) {
+        .gp-info-badge-card { display: none !important; }
+        .gp-title-text h1 { font-size: 1.7rem !important; }
+    }
+
     .gp-title-area {
         display: flex;
+        flex: 1 1 360px;
+        min-width: 0;
         align-items: center;
         gap: 1rem;
     }
@@ -402,7 +400,7 @@ st.markdown("""
 
     .gp-tagline {
         font-size: 0.82rem;
-        color: #747F8F;
+        color: #8A94A3;
         margin-top: 3px;
     }
 
@@ -423,7 +421,7 @@ st.markdown("""
         font-weight: 700;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: #747F8F;
+        color: #8A94A3;
         line-height: 1.35;
     }
 
@@ -473,7 +471,7 @@ st.markdown("""
 
     .gp-card-subtitle {
         font-size: 0.78rem;
-        color: #747F8F;
+        color: #8A94A3;
         margin-bottom: 1.1rem;
         padding-bottom: 0.65rem;
         border-bottom: 1px solid #232831;
@@ -509,8 +507,8 @@ st.markdown("""
         background: #2A3039;
     }
 
-    /* Primary Analysis Button */
-    div.stButton > button:first-child {
+    /* Primary Analysis Button (form submit button) */
+    div[data-testid="stFormSubmitButton"] > button {
         background: linear-gradient(135deg, #FF5B55 0%, #E0443E 100%) !important;
         color: #FFFFFF !important;
         font-family: 'Inter', sans-serif !important;
@@ -525,7 +523,7 @@ st.markdown("""
         margin-top: 0.5rem !important;
     }
 
-    div.stButton > button:first-child:hover {
+    div[data-testid="stFormSubmitButton"] > button:hover {
         transform: translateY(-2px) !important;
         box-shadow: 0 12px 28px -4px rgba(255, 91, 85, 0.55) !important;
         background: linear-gradient(135deg, #FF6B65 0%, #E84C46 100%) !important;
@@ -562,7 +560,7 @@ st.markdown("""
 
     .gp-empty-desc {
         font-size: 0.88rem;
-        color: #747F8F;
+        color: #8A94A3;
         max-width: 480px;
         margin: 0 auto;
         line-height: 1.5;
@@ -641,7 +639,7 @@ st.markdown("""
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        color: #747F8F;
+        color: #8A94A3;
         margin-bottom: 0.35rem;
     }
 
@@ -687,7 +685,7 @@ st.markdown("""
     .gp-kpi-title {
         font-size: 0.74rem;
         font-weight: 700;
-        color: #747F8F;
+        color: #8A94A3;
         text-transform: uppercase;
         letter-spacing: 0.06em;
         margin-bottom: 0.3rem;
@@ -712,34 +710,64 @@ st.markdown("""
 # ==============================================================================
 # 4. ASSETS & VERIFIED MODEL LOADING
 # ==============================================================================
+BASE_DIR = Path(__file__).resolve().parent
+MODEL_PATH = BASE_DIR / "models" / "gaming_retention_model.joblib"
+METADATA_PATH = BASE_DIR / "models" / "model_metadata.joblib"
+DATA_PATH = BASE_DIR / "data" / "online_gaming_behavior_dataset.csv"
+FEATURE_IMPORTANCE_PATH = BASE_DIR / "outputs" / "feature_importance.csv"
+
+DEFAULT_FEATURES = [
+    "Age", "Gender", "Location", "GameGenre", "PlayTimeHours",
+    "InGamePurchases", "GameDifficulty", "SessionsPerWeek",
+    "AvgSessionDurationMinutes", "PlayerLevel", "AchievementsUnlocked"
+]
+
+
 @st.cache_resource
 def load_assets():
     """
     Loads the serialized Random Forest pipeline and metadata from /models.
-    Cached across sessions to maintain sub-15ms inference latency.
+    Paths are resolved relative to this file, so the app works from any cwd.
+    Returns (pipeline, metadata, error_message).
     """
-    model_path = Path("models/gaming_retention_model.joblib")
-    metadata_path = Path("models/model_metadata.joblib")
-    
-    if not model_path.exists() or not metadata_path.exists():
-        return None, None
-        
+    missing = [str(p.relative_to(BASE_DIR)) for p in (MODEL_PATH, METADATA_PATH) if not p.exists()]
+    if missing:
+        return None, None, f"Missing model file(s): {', '.join(missing)}"
     try:
-        pipeline = joblib.load(model_path)
-        metadata = joblib.load(metadata_path)
-        return pipeline, metadata
-    except Exception:
-        return None, None
+        return joblib.load(MODEL_PATH), joblib.load(METADATA_PATH), None
+    except Exception as exc:  # surface the real reason (e.g. scikit-learn version mismatch)
+        return None, None, f"Could not load model: {type(exc).__name__}: {exc}"
 
-pipeline, metadata = load_assets()
+
+@st.cache_data
+def load_dataset():
+    """Loads the benchmark dataset and adds the binary retention proxy target."""
+    if not DATA_PATH.exists():
+        return None
+    df = pd.read_csv(DATA_PATH)
+    df["RetentionTarget"] = (df["EngagementLevel"] != "Low").astype(int)
+    return df
+
+
+pipeline, metadata, model_error = load_assets()
 model_loaded = pipeline is not None and metadata is not None
+dataset = load_dataset()
 
 # Feature Schema Definitions from Model Training
-EXPECTED_FEATURES = metadata.get("input_features", []) if model_loaded else [
-    "Age", "Gender", "Location", "GameGenre", "PlayTimeHours", 
-    "InGamePurchases", "GameDifficulty", "SessionsPerWeek", 
-    "AvgSessionDurationMinutes", "PlayerLevel", "AchievementsUnlocked"
-]
+EXPECTED_FEATURES = metadata.get("input_features", DEFAULT_FEATURES) if model_loaded else DEFAULT_FEATURES
+N_TREES = (
+    metadata.get("number_of_trees")
+    or getattr(pipeline.named_steps.get("classifier"), "n_estimators", None)
+) if model_loaded else None
+TREES_LABEL = f"{N_TREES} Trees" if N_TREES else "n/a"
+
+try:
+    N_ENGINEERED = len(pipeline.named_steps["preprocessor"].get_feature_names_out()) if model_loaded else 21
+except Exception:
+    N_ENGINEERED = len(metadata.get("engineered_feature_names", [])) or 21
+
+# Max-class probability at or above which a prediction is called a "strong signal".
+STRONG_SIGNAL_THRESHOLD = 85.0
 
 CATEGORICAL_OPTIONS = {
     "Gender": ["Male", "Female"],
@@ -748,7 +776,22 @@ CATEGORICAL_OPTIONS = {
     "GameDifficulty": ["Easy", "Medium", "Hard"]
 }
 
-# Baseline Global Dataset Benchmarks for Telemetry Comparison
+# Observed training ranges: inputs are limited to these so the model never extrapolates.
+FEATURE_RANGES = {
+    "Age": (15, 49),
+    "PlayTimeHours": (0.0, 24.0),
+    "SessionsPerWeek": (0, 19),
+    "AvgSessionDurationMinutes": (10, 179),
+    "PlayerLevel": (1, 99),
+    "AchievementsUnlocked": (0, 49),
+}
+if dataset is not None:
+    FEATURE_RANGES = {
+        col: (type(lo)(dataset[col].min()), type(lo)(dataset[col].max()))
+        for col, (lo, _) in FEATURE_RANGES.items()
+    }
+
+# Baseline Global Dataset Benchmarks for Telemetry Comparison (computed from the data)
 DATASET_BENCHMARKS = {
     "PlayTimeHours": 12.02,
     "SessionsPerWeek": 9.47,
@@ -757,82 +800,221 @@ DATASET_BENCHMARKS = {
     "AchievementsUnlocked": 24.53,
     "Age": 31.99
 }
+if dataset is not None:
+    DATASET_BENCHMARKS = {col: float(dataset[col].mean()) for col in DATASET_BENCHMARKS}
 
-# Real Latency Measurement Benchmark
-def measure_inference_latency(pipe, features):
-    if pipe is None:
+
+@st.cache_data
+def compute_dataset_summary(_df):
+    """Descriptive statistics used by the Analytics page."""
+    tiers = ["Low", "Medium", "High"]
+    counts = _df["EngagementLevel"].value_counts().reindex(tiers).fillna(0).astype(int)
+    means = _df.groupby("EngagementLevel")[["SessionsPerWeek", "AvgSessionDurationMinutes"]].mean().reindex(tiers)
+    corr_cols = ["Age", "PlayTimeHours", "RetentionTarget", "SessionsPerWeek", "AvgSessionDurationMinutes", "PlayerLevel"]
+    corr = _df[corr_cols].corr()
+    raw = _df.drop(columns=["RetentionTarget"])
+    return {
+        "n_records": len(_df),
+        "n_missing": int(raw.isna().sum().sum()),
+        "n_duplicates": int(raw.duplicated().sum()),
+        "tier_counts": counts,
+        "tier_share": counts / counts.sum() * 100,
+        "means": means,
+        "corr": corr,
+        "corr_labels": ["Age", "Playtime", "Target", "Sessions", "Duration", "Level"],
+    }
+
+
+@st.cache_data
+def compute_holdout_evaluation(_pipe, _df, features, random_state, test_size=0.2):
+    """
+    Re-creates the stratified 80/20 holdout split used in training
+    (same random_state) and evaluates the loaded pipeline on it.
+    """
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import (accuracy_score, confusion_matrix, f1_score,
+                                 precision_score, recall_score, roc_auc_score)
+    X, y = _df[features], _df["RetentionTarget"]
+    _, X_test, _, y_test = train_test_split(
+        X, y, test_size=test_size, stratify=y, random_state=random_state
+    )
+    y_pred = _pipe.predict(X_test)
+    y_prob = _pipe.predict_proba(X_test)[:, list(_pipe.classes_).index(1)]
+    return {
+        "n_test": len(y_test),
+        "accuracy": accuracy_score(y_test, y_pred),
+        "precision": precision_score(y_test, y_pred, pos_label=1),
+        "recall": recall_score(y_test, y_pred, pos_label=1),
+        "f1_score": f1_score(y_test, y_pred, pos_label=1),
+        "macro_f1": f1_score(y_test, y_pred, average="macro"),
+        "recall_at_risk": recall_score(y_test, y_pred, pos_label=0),
+        "roc_auc": roc_auc_score(y_test, y_prob),
+        "confusion": confusion_matrix(y_test, y_pred, labels=[0, 1]),
+    }
+
+
+# Holdout metrics: recomputed live when possible, else taken from saved metadata.
+holdout_eval = None
+if model_loaded and dataset is not None:
+    try:
+        holdout_eval = compute_holdout_evaluation(
+            pipeline, dataset, EXPECTED_FEATURES, metadata.get("random_state", 42)
+        )
+    except Exception:
+        holdout_eval = None
+test_metrics = holdout_eval if holdout_eval is not None else (metadata.get("test_metrics", {}) if model_loaded else {})
+
+
+@st.cache_resource
+def measure_inference_latency(_pipe, features):
+    """
+    Median single-row latency over several warm runs. Measured once per server
+    process (cached) instead of on every rerun; no artificial floor.
+    """
+    if _pipe is None:
         return None
     try:
-        dummy_row = pd.DataFrame([{
+        row = pd.DataFrame([{
             "Age": 30, "Gender": "Male", "Location": "USA", "GameGenre": "Sports",
             "PlayTimeHours": 12.0, "InGamePurchases": 0, "GameDifficulty": "Medium",
             "SessionsPerWeek": 9, "AvgSessionDurationMinutes": 95,
             "PlayerLevel": 50, "AchievementsUnlocked": 25
-        }])[features]
-        t0 = time.perf_counter()
-        _ = pipe.predict(dummy_row)
-        latency = (time.perf_counter() - t0) * 1000
-        return max(latency, 2.5)  # Realistic execution footprint
+        }])[list(features)]
+        _pipe.predict_proba(row)  # warm-up
+        timings = []
+        for _ in range(7):
+            t0 = time.perf_counter()
+            _pipe.predict_proba(row)
+            timings.append((time.perf_counter() - t0) * 1000)
+        return float(np.median(timings))
     except Exception:
         return None
 
-measured_latency = measure_inference_latency(pipeline, EXPECTED_FEATURES)
+measured_latency = measure_inference_latency(pipeline, tuple(EXPECTED_FEATURES))
 
 # Dynamic Domain Feature Importance Derivation
+DOMAIN_TYPES = {
+    "SessionsPerWeek": "Telemetry",
+    "AvgSessionDurationMinutes": "Telemetry",
+    "PlayerLevel": "Progression",
+    "AchievementsUnlocked": "Gamification",
+    "PlayTimeHours": "Telemetry",
+    "Age": "Demographic",
+    "GameGenre": "Behavioral",
+    "Location": "Demographic",
+    "GameDifficulty": "UX Mechanics",
+    "Gender": "Demographic",
+    "InGamePurchases": "Monetization"
+}
+
+
+def _parent_feature(name):
+    """Maps an engineered column (e.g. 'cat__Location_USA') back to its raw feature."""
+    name = str(name).split("__", 1)[-1]
+    for raw in DOMAIN_TYPES:
+        if name == raw or name.startswith(raw + "_"):
+            return raw
+    return name
+
+
 def get_domain_feature_importance(pipe, meta):
-    domain_types = {
-        "SessionsPerWeek": "Telemetry",
-        "AvgSessionDurationMinutes": "Telemetry",
-        "PlayerLevel": "Progression",
-        "AchievementsUnlocked": "Gamification",
-        "PlayTimeHours": "Telemetry",
-        "Age": "Demographic",
-        "GameGenre": "Behavioral",
-        "Location": "Demographic",
-        "GameDifficulty": "UX Mechanics",
-        "Gender": "Demographic",
-        "InGamePurchases": "Monetization"
-    }
     domain_importance = {}
-    fi_file = Path("outputs/feature_importance.csv")
-    if fi_file.exists():
+
+    # Prefer the live model so the chart always matches the loaded pipeline.
+    if pipe is not None and hasattr(pipe, "named_steps"):
         try:
-            df_fi = pd.read_csv(fi_file)
-            for _, row in df_fi.iterrows():
-                feat = str(row["Feature"])
-                imp = float(row["Importance"])
-                parent = feat.split("_")[0] if "_" in feat else feat
-                domain_importance[parent] = domain_importance.get(parent, 0.0) + imp
+            rf = pipe.named_steps["classifier"]
+            try:
+                feat_names = list(pipe.named_steps["preprocessor"].get_feature_names_out())
+            except Exception:
+                feat_names = list(meta.get("engineered_feature_names", []))
+            for feat, imp in zip(feat_names, rf.feature_importances_):
+                parent = _parent_feature(feat)
+                domain_importance[parent] = domain_importance.get(parent, 0.0) + float(imp)
         except Exception:
             domain_importance = {}
 
-    if not domain_importance and pipe is not None and hasattr(pipe, "named_steps"):
+    if not domain_importance and FEATURE_IMPORTANCE_PATH.exists():
         try:
-            rf = pipe.named_steps["classifier"]
-            importances = rf.feature_importances_
-            feat_names = meta.get("engineered_feature_names", [])
-            for feat, imp in zip(feat_names, importances):
-                parent = feat.split("_")[0] if "_" in feat else feat
-                domain_importance[parent] = domain_importance.get(parent, 0.0) + float(imp)
+            df_fi = pd.read_csv(FEATURE_IMPORTANCE_PATH)
+            for _, row in df_fi.iterrows():
+                parent = _parent_feature(row["Feature"])
+                domain_importance[parent] = domain_importance.get(parent, 0.0) + float(row["Importance"])
         except Exception:
-            pass
+            domain_importance = {}
 
     if domain_importance:
-        records = []
-        for parent, imp in sorted(domain_importance.items(), key=lambda x: x[1], reverse=True):
-            records.append({
+        records = [
+            {
                 "Domain Feature": parent,
-                "Type": domain_types.get(parent, "Behavioral"),
-                "Cumulative Gini": imp * 100.0 if imp <= 1.0 else imp
-            })
+                "Type": DOMAIN_TYPES.get(parent, "Behavioral"),
+                "Cumulative Gini": imp * 100.0,
+            }
+            for parent, imp in sorted(domain_importance.items(), key=lambda x: x[1], reverse=True)
+        ]
         return pd.DataFrame(records)
 
-    # Deterministic holdout fallback
+    # Static fallback (values from outputs/model_evaluation.txt)
     return pd.DataFrame({
         "Domain Feature": ["SessionsPerWeek", "AvgSessionDurationMinutes", "PlayerLevel", "AchievementsUnlocked", "PlayTimeHours", "Age", "GameGenre", "Location", "GameDifficulty", "Gender", "InGamePurchases"],
         "Type": ["Telemetry", "Telemetry", "Progression", "Gamification", "Telemetry", "Demographic", "Behavioral", "Demographic", "UX Mechanics", "Demographic", "Monetization"],
         "Cumulative Gini": [42.14, 37.35, 5.67, 5.16, 3.79, 2.17, 1.27, 1.00, 0.77, 0.40, 0.28]
     })
+
+df_domain_fi = get_domain_feature_importance(pipeline, metadata or {})
+
+# ==============================================================================
+# PLAYER PRESETS (stored in session_state so custom edits are never overwritten)
+# ==============================================================================
+DEFAULT_PLAYER = {
+    "Age": 30, "Gender": "Male", "Location": "USA", "GameGenre": "Sports",
+    "PlayTimeHours": 12.0, "InGamePurchases": 0, "GameDifficulty": "Medium",
+    "SessionsPerWeek": 9, "AvgSessionDurationMinutes": 95,
+    "PlayerLevel": 50, "AchievementsUnlocked": 25,
+}
+PLAYER_PRESETS = {
+    # ~91% retained probability
+    "Active Veteran Player (High Retention)": {
+        "Age": 26, "Gender": "Female", "Location": "USA", "GameGenre": "Action",
+        "PlayTimeHours": 14.0, "InGamePurchases": 1, "GameDifficulty": "Medium",
+        "SessionsPerWeek": 15, "AvgSessionDurationMinutes": 130,
+        "PlayerLevel": 88, "AchievementsUnlocked": 44,
+    },
+    # ~8% retained probability
+    "Disengaged Casual Player (High Churn Risk)": {
+        "Age": 38, "Gender": "Male", "Location": "Europe", "GameGenre": "RPG",
+        "PlayTimeHours": 3.2, "InGamePurchases": 0, "GameDifficulty": "Hard",
+        "SessionsPerWeek": 2, "AvgSessionDurationMinutes": 35,
+        "PlayerLevel": 9, "AchievementsUnlocked": 4,
+    },
+    # ~43% retained probability: sits right on the decision boundary
+    "Weekend Moderate Gamer (Threshold Cohort)": {
+        "Age": 31, "Gender": "Male", "Location": "Asia", "GameGenre": "Strategy",
+        "PlayTimeHours": 10.5, "InGamePurchases": 0, "GameDifficulty": "Easy",
+        "SessionsPerWeek": 4, "AvgSessionDurationMinutes": 70,
+        "PlayerLevel": 42, "AchievementsUnlocked": 20,
+    },
+}
+
+def _input_key(feature):
+    return f"in_{feature}"
+
+# Streamlit deletes a widget's state on any run where the widget isn't rendered
+# (e.g. while another page is open). Re-assigning each key at the top of every run
+# marks it as user-owned so the simulator inputs survive page switches.
+for _feat, _val in DEFAULT_PLAYER.items():
+    _k = _input_key(_feat)
+    st.session_state[_k] = st.session_state.get(_k, _val)
+
+
+def apply_preset():
+    """Loads the chosen persona into the form. 'Custom Player' leaves current values alone."""
+    values = PLAYER_PRESETS.get(st.session_state.get("selected_preset"))
+    if values:
+        for feat, val in values.items():
+            st.session_state[_input_key(feat)] = val
+    st.session_state.pop("last_prediction", None)
+
 
 # ==============================================================================
 # 5. SIDEBAR NAVIGATION & CONTROLS
@@ -852,7 +1034,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
     # Workspace Section Navigation
-    st.markdown(f'<div class="gp-sidebar-label">{svg_icon("grid", "#747F8F", 14)} WORKSPACE</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="gp-sidebar-label">{svg_icon("grid", "#8A94A3", 14)} WORKSPACE</div>', unsafe_allow_html=True)
     
     NAV_OPTIONS = [
         "Player Simulator",
@@ -875,7 +1057,7 @@ with st.sidebar:
     st.markdown('<div style="margin-top: 1.4rem;"></div>', unsafe_allow_html=True)
 
     # Player Preset Persona Selector
-    st.markdown(f'<div class="gp-sidebar-label">{svg_icon("user", "#747F8F", 14)} PLAYER PRESET</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="gp-sidebar-label">{svg_icon("user", "#8A94A3", 14)} PLAYER PRESET</div>', unsafe_allow_html=True)
     
     PRESET_CHOICES = [
         "Custom Player",
@@ -883,48 +1065,31 @@ with st.sidebar:
         "Disengaged Casual Player (High Churn Risk)",
         "Weekend Moderate Gamer (Threshold Cohort)"
     ]
-    
-    selected_preset = st.selectbox(
+    st.selectbox(
         "Select Player Preset Persona:",
         PRESET_CHOICES,
-        index=0,
+        key="selected_preset",
+        on_change=apply_preset,
         label_visibility="collapsed",
-        help="Loads validated empirical telemetry from canonical player cohorts."
+        help="Loads representative telemetry for a player persona into the simulator form."
     )
-    st.caption("Select a validated player persona to test the model live.")
-
-    # Persona telemetry presets
-    if selected_preset == "Active Veteran Player (High Retention)":
-        p_age, p_gender, p_loc, p_genre = 26, "Female", "USA", "Action"
-        p_playtime, p_purchases, p_diff = 21.5, 1, "Medium"
-        p_sessions, p_duration, p_level, p_achieve = 16, 145, 88, 44
-    elif selected_preset == "Disengaged Casual Player (High Churn Risk)":
-        p_age, p_gender, p_loc, p_genre = 38, "Male", "Europe", "RPG"
-        p_playtime, p_purchases, p_diff = 3.2, 0, "Hard"
-        p_sessions, p_duration, p_level, p_achieve = 2, 35, 9, 4
-    elif selected_preset == "Weekend Moderate Gamer (Threshold Cohort)":
-        p_age, p_gender, p_loc, p_genre = 31, "Male", "Asia", "Strategy"
-        p_playtime, p_purchases, p_diff = 10.5, 0, "Easy"
-        p_sessions, p_duration, p_level, p_achieve = 7, 85, 42, 20
-    else:
-        p_age, p_gender, p_loc, p_genre = 30, "Male", "USA", "Sports"
-        p_playtime, p_purchases, p_diff = 12.0, 0, "Medium"
-        p_sessions, p_duration, p_level, p_achieve = 9, 95, 50, 25
+    st.caption("Pick a persona to fill the form, or choose Custom Player to keep your own values.")
 
     st.markdown('<div style="margin-top: 1.4rem;"></div>', unsafe_allow_html=True)
 
     # Live Engine Status Card
-    st.markdown(f'<div class="gp-sidebar-label">{svg_icon("settings", "#747F8F", 14)} MODEL STATUS</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="gp-sidebar-label">{svg_icon("settings", "#8A94A3", 14)} MODEL STATUS</div>', unsafe_allow_html=True)
     
-    test_metrics = metadata.get("test_metrics", {}) if model_loaded else {}
-    f1_val = test_metrics.get("f1_score", 0.96366)
-    roc_val = test_metrics.get("roc_auc", 0.94301)
+    f1_val = test_metrics.get("f1_score")
+    roc_val = test_metrics.get("roc_auc")
+    f1_str = f"{f1_val * 100:.2f}%" if f1_val is not None else "n/a"
+    roc_str = f"{roc_val:.4f}" if roc_val is not None else "n/a"
     
     status_dot = '<span class="gp-dot-live"></span>' if model_loaded else '<span class="gp-dot-live" style="background:#FF6B75; box-shadow:0 0 8px #FF6B75;"></span>'
     status_text = "Model loaded" if model_loaded else "Model unavailable"
-    status_sub = "Ready for inference" if model_loaded else "Train pipeline to restore"
+    status_sub = "Ready for inference" if model_loaded else "See error on Simulator page"
     
-    latency_str = f"~ {measured_latency:.1f} ms" if measured_latency else "< 15 ms"
+    latency_str = f"~ {measured_latency:.1f} ms" if measured_latency is not None else "n/a"
 
     st.markdown(f"""
     <div class="gp-status-card">
@@ -933,10 +1098,10 @@ with st.sidebar:
                 {status_dot}
                 <div>
                     <div style="font-weight:700; font-size:0.86rem; color:#F5F7FA;">{status_text}</div>
-                    <div style="font-size:0.72rem; color:#747F8F;">{status_sub}</div>
+                    <div style="font-size:0.72rem; color:#8A94A3;">{status_sub}</div>
                 </div>
             </div>
-            <span style="color:#747F8F; font-size:0.9rem;">›</span>
+            <span style="color:#8A94A3; font-size:0.9rem;">›</span>
         </div>
         <div class="gp-status-metric-row">
             <span class="gp-status-label">Model Engine</span>
@@ -944,16 +1109,16 @@ with st.sidebar:
         </div>
         <div class="gp-status-metric-row">
             <span class="gp-status-label">Estimators</span>
-            <span class="gp-status-val">150 Trees</span>
+            <span class="gp-status-val">{TREES_LABEL}</span>
         </div>
         <div style="margin: 0.6rem 0; border-top: 1px solid #232831;"></div>
         <div class="gp-status-metric-row">
-            <span class="gp-status-label">Holdout Macro F1</span>
-            <span class="gp-status-val" style="color: #62D6A5;">{f1_val*100:.2f}%</span>
+            <span class="gp-status-label">Holdout F1 (Retained)</span>
+            <span class="gp-status-val" style="color: #62D6A5;">{f1_str}</span>
         </div>
         <div class="gp-status-metric-row">
             <span class="gp-status-label">ROC-AUC Score</span>
-            <span class="gp-status-val" style="color: #7DD3FC;">{roc_val*100:.2f}%</span>
+            <span class="gp-status-val" style="color: #7DD3FC;">{roc_str}</span>
         </div>
         <div class="gp-status-metric-row">
             <span class="gp-status-label">Inference Speed</span>
@@ -965,8 +1130,8 @@ with st.sidebar:
     # Sidebar Attribution Footer
     st.markdown('<div style="margin-top: 2rem;"></div>', unsafe_allow_html=True)
     st.markdown(f"""
-    <div style="display:flex; align-items:center; gap:0.45rem; color:#747F8F; font-size:0.74rem; line-height:1.45; padding-left: 0.2rem;">
-        {svg_icon('graduation', '#747F8F', 16)}
+    <div style="display:flex; align-items:center; gap:0.45rem; color:#8A94A3; font-size:0.74rem; line-height:1.45; padding-left: 0.2rem;">
+        {svg_icon('graduation', '#8A94A3', 16)}
         <div>
             Academic ML Project · 2026
         </div>
@@ -980,7 +1145,7 @@ st.markdown(f"""
 <div class="gp-global-header">
     <div class="gp-breadcrumb">
         <span>Workspace</span>
-        <span style="color:#747F8F;">/</span>
+        <span style="color:#8A94A3;">/</span>
         <span class="gp-breadcrumb-active">{st.session_state['current_page']}</span>
     </div>
     <div style="display: flex; align-items: center; gap: 0.75rem;">
@@ -1015,7 +1180,7 @@ if st.session_state["current_page"] == "Player Simulator":
         </div>
         <div class="gp-info-badge-card">
             <div style="display:flex; align-items:center;">
-                {svg_icon('analytics', '#747F8F', 24)}
+                {svg_icon('analytics', '#8A94A3', 24)}
             </div>
             <div class="gp-info-badge-text">
                 TURN PLAYER DATA INTO MEANINGFUL ENGAGEMENT INSIGHTS
@@ -1035,7 +1200,17 @@ if st.session_state["current_page"] == "Player Simulator":
     </div>
     """, unsafe_allow_html=True)
 
-    # Simulator Input Form
+    if not model_loaded:
+        st.error(f"Model engine is unavailable. {model_error or ''}".strip())
+
+    # Simulator Input Form (values live in st.session_state, keyed by feature)
+    age_lo, age_hi = FEATURE_RANGES["Age"]
+    pt_lo, pt_hi = FEATURE_RANGES["PlayTimeHours"]
+    ses_lo, ses_hi = FEATURE_RANGES["SessionsPerWeek"]
+    dur_lo, dur_hi = FEATURE_RANGES["AvgSessionDurationMinutes"]
+    lvl_lo, lvl_hi = FEATURE_RANGES["PlayerLevel"]
+    ach_lo, ach_hi = FEATURE_RANGES["AchievementsUnlocked"]
+
     with st.form(key="gamepulse_simulator_form"):
         col_p1, col_p2, col_p3 = st.columns(3)
 
@@ -1051,27 +1226,24 @@ if st.session_state["current_page"] == "Player Simulator":
             <div class="gp-card-subtitle">Basic demographic and gaming preferences</div>
             """, unsafe_allow_html=True)
 
-            age = st.number_input(
-                "Player Age", 
-                min_value=15, max_value=60, value=int(p_age), step=1,
-                help="Reported player chronological age (observed dataset range: 15–49)."
+            st.number_input(
+                "Player Age",
+                min_value=int(age_lo), max_value=int(age_hi), step=1, key=_input_key("Age"),
+                help=f"Player age. Limited to the range seen in training ({age_lo}–{age_hi})."
             )
-            gender = st.selectbox(
-                "Player Gender", 
-                options=CATEGORICAL_OPTIONS["Gender"], 
-                index=CATEGORICAL_OPTIONS["Gender"].index(p_gender),
+            st.selectbox(
+                "Player Gender",
+                options=CATEGORICAL_OPTIONS["Gender"], key=_input_key("Gender"),
                 help="Player self-identified gender."
             )
-            location = st.selectbox(
-                "Server Region / Location", 
-                options=CATEGORICAL_OPTIONS["Location"], 
-                index=CATEGORICAL_OPTIONS["Location"].index(p_loc),
+            st.selectbox(
+                "Server Region / Location",
+                options=CATEGORICAL_OPTIONS["Location"], key=_input_key("Location"),
                 help="Geographic server cluster where session matches are hosted."
             )
-            game_genre = st.selectbox(
-                "Primary Game Genre", 
-                options=CATEGORICAL_OPTIONS["GameGenre"], 
-                index=CATEGORICAL_OPTIONS["GameGenre"].index(p_genre),
+            st.selectbox(
+                "Primary Game Genre",
+                options=CATEGORICAL_OPTIONS["GameGenre"], key=_input_key("GameGenre"),
                 help="Core gameplay mechanic genre."
             )
 
@@ -1087,20 +1259,20 @@ if st.session_state["current_page"] == "Player Simulator":
             <div class="gp-card-subtitle">Gaming activity and session patterns</div>
             """, unsafe_allow_html=True)
 
-            playtime_hours = st.slider(
-                "Weekly Playtime (Hours)", 
-                min_value=0.0, max_value=24.0, value=float(p_playtime), step=0.5,
+            st.slider(
+                "Weekly Playtime (Hours)",
+                min_value=float(pt_lo), max_value=float(pt_hi), step=0.5, key=_input_key("PlayTimeHours"),
                 help="Cumulative active gameplay hours accumulated across 7 calendar days."
             )
-            sessions_per_week = st.slider(
-                "Weekly Sessions (Frequency)", 
-                min_value=0, max_value=19, value=int(p_sessions), step=1,
+            st.slider(
+                "Weekly Sessions (Frequency)",
+                min_value=int(ses_lo), max_value=int(ses_hi), step=1, key=_input_key("SessionsPerWeek"),
                 help="Discrete login instances initiated during the observation week."
             )
-            avg_session_duration = st.slider(
-                "Avg Session Duration (Minutes)", 
-                min_value=10, max_value=179, value=int(p_duration), step=5,
-                help="Mean continuous session duration in minutes (dataset range: 10–179 min)."
+            st.slider(
+                "Avg Session Duration (Minutes)",
+                min_value=int(dur_lo), max_value=int(dur_hi), step=1, key=_input_key("AvgSessionDurationMinutes"),
+                help=f"Mean continuous session duration in minutes (dataset range: {dur_lo}–{dur_hi} min)."
             )
 
         # ----------------------------------------------------------------------
@@ -1115,244 +1287,247 @@ if st.session_state["current_page"] == "Player Simulator":
             <div class="gp-card-subtitle">Game difficulty, progression and spending</div>
             """, unsafe_allow_html=True)
 
-            game_difficulty = st.selectbox(
-                "Game Difficulty Level", 
-                options=CATEGORICAL_OPTIONS["GameDifficulty"], 
-                index=CATEGORICAL_OPTIONS["GameDifficulty"].index(p_diff),
+            st.selectbox(
+                "Game Difficulty Level",
+                options=CATEGORICAL_OPTIONS["GameDifficulty"], key=_input_key("GameDifficulty"),
                 help="Skill and challenge level selected by the player."
             )
-            in_game_purchases = st.radio(
-                "In-Game Purchases (Microtransactions)", 
-                options=[0, 1], 
+            st.radio(
+                "In-Game Purchases (Microtransactions)",
+                options=[0, 1],
                 format_func=lambda x: "Active Spender (1)" if x == 1 else "Non-Spender / Free-to-Play (0)",
-                index=int(p_purchases),
+                key=_input_key("InGamePurchases"),
                 help="Whether player has transacted for cosmetic or gameplay items."
             )
-            player_level = st.number_input(
-                "In-Game Progression Level", 
-                min_value=1, max_value=99, value=int(p_level), step=1,
-                help="Account mastery progression level (observed range: 1–99)."
+            st.number_input(
+                "In-Game Progression Level",
+                min_value=int(lvl_lo), max_value=int(lvl_hi), step=1, key=_input_key("PlayerLevel"),
+                help=f"Account mastery progression level (observed range: {lvl_lo}–{lvl_hi})."
             )
-            achievements_unlocked = st.number_input(
-                "Achievements Unlocked", 
-                min_value=0, max_value=49, value=int(p_achieve), step=1,
-                help="Cumulative milestone achievement badges earned (0–49)."
+            st.number_input(
+                "Achievements Unlocked",
+                min_value=int(ach_lo), max_value=int(ach_hi), step=1, key=_input_key("AchievementsUnlocked"),
+                help=f"Cumulative milestone achievement badges earned ({ach_lo}–{ach_hi})."
             )
 
         st.markdown('<div style="margin-top: 0.6rem;"></div>', unsafe_allow_html=True)
         analyze_clicked = st.form_submit_button(
             label="Analyze Player Engagement",
             type="primary",
+            disabled=not model_loaded,
             **_stretch_kwargs(st.form_submit_button)
         )
 
-    # Telemetry Consistency Check
-    implied_playtime = (sessions_per_week * avg_session_duration) / 60.0
-    if implied_playtime > playtime_hours + 8.0:
+    # --------------------------------------------------------------------------
+    # PREDICTION EXECUTION (result is kept in session_state across reruns)
+    # --------------------------------------------------------------------------
+    if analyze_clicked and model_loaded:
+        input_dict = {
+            "Age": int(st.session_state[_input_key("Age")]),
+            "Gender": str(st.session_state[_input_key("Gender")]),
+            "Location": str(st.session_state[_input_key("Location")]),
+            "GameGenre": str(st.session_state[_input_key("GameGenre")]),
+            "PlayTimeHours": float(st.session_state[_input_key("PlayTimeHours")]),
+            "InGamePurchases": int(st.session_state[_input_key("InGamePurchases")]),
+            "GameDifficulty": str(st.session_state[_input_key("GameDifficulty")]),
+            "SessionsPerWeek": int(st.session_state[_input_key("SessionsPerWeek")]),
+            "AvgSessionDurationMinutes": int(st.session_state[_input_key("AvgSessionDurationMinutes")]),
+            "PlayerLevel": int(st.session_state[_input_key("PlayerLevel")]),
+            "AchievementsUnlocked": int(st.session_state[_input_key("AchievementsUnlocked")])
+        }
+        try:
+            input_df = pd.DataFrame([input_dict])[EXPECTED_FEATURES]
+            probs = pipeline.predict_proba(input_df)[0]
+            classes = list(pipeline.classes_)
+            st.session_state["last_prediction"] = {
+                "inputs": input_dict,
+                "prob_retained": float(probs[classes.index(1)]) * 100,
+                "prob_risk": float(probs[classes.index(0)]) * 100,
+                "pred": int(pipeline.predict(input_df)[0]),
+            }
+        except Exception as e:
+            st.session_state.pop("last_prediction", None)
+            st.error(f"Inference execution error: {e}")
+
+    result = st.session_state.get("last_prediction")
+
+    if result:
+        inp = result["inputs"]
+        prob_retained, prob_risk, pred_binary = result["prob_retained"], result["prob_risk"], result["pred"]
+        confidence = max(prob_retained, prob_risk)
+        strong_signal = confidence >= STRONG_SIGNAL_THRESHOLD
+
+        current_inputs = {f: st.session_state.get(_input_key(f)) for f in inp}
+        if any(current_inputs[f] != inp[f] for f in inp):
+            st.caption("Showing results for the last submitted inputs. Select **Analyze Player Engagement** to update.")
+
+        # Telemetry Consistency Check
+        implied_playtime = (inp["SessionsPerWeek"] * inp["AvgSessionDurationMinutes"]) / 60.0
+        if implied_playtime > inp["PlayTimeHours"] + 8.0:
+            st.markdown(f"""
+            <div style="background: rgba(125, 211, 252, 0.08); border: 1px solid rgba(125, 211, 252, 0.3); border-radius: 8px; padding: 0.6rem 1rem; font-size: 0.82rem; color: #7DD3FC; margin-top: 0.8rem; display:flex; align-items:center; gap:0.55rem;">
+                {svg_icon('info', '#7DD3FC', 16)}
+                <div>
+                    <strong>Telemetry Note:</strong> Entered frequency ({inp["SessionsPerWeek"]} sessions) and duration ({inp["AvgSessionDurationMinutes"]} mins) imply ~{implied_playtime:.1f} hours/week versus entered playtime ({inp["PlayTimeHours"]} hrs). The model treats each feature independently.
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        # Binary model output + confidence band (the model does NOT predict High vs Medium)
+        if pred_binary == 1:
+            class_label = "RETAINED"
+            if strong_signal:
+                band = "strong"
+                tier_label = "RETAINED · STRONG SIGNAL"
+                tier_desc = f"The model is confident this player is engaged. Retention probability is {prob_retained:.1f}%."
+                banner_cls, accent, tier_icon = "gp-banner-high", "#C7F36B", svg_icon("star", "#C7F36B", 22)
+            else:
+                band = "borderline"
+                tier_label = "RETAINED · BORDERLINE"
+                tier_desc = f"Classified as retained, but close to the decision boundary. Retention probability is {prob_retained:.1f}%."
+                banner_cls, accent, tier_icon = "gp-banner-med", "#F3C969", svg_icon("shield", "#F3C969", 22)
+        else:
+            class_label = "AT RISK"
+            band = "strong" if strong_signal else "borderline"
+            tier_label = "AT RISK · STRONG SIGNAL" if strong_signal else "AT RISK · BORDERLINE"
+            tier_desc = f"Telemetry resembles low-engagement players. At-risk probability is {prob_risk:.1f}%."
+            banner_cls, accent, tier_icon = "gp-banner-low", "#FF5B55", svg_icon("alert", "#FF5B55", 22)
+
+        # 1. Decision Hero Banner
         st.markdown(f"""
-        <div style="background: rgba(125, 211, 252, 0.08); border: 1px solid rgba(125, 211, 252, 0.3); border-radius: 8px; padding: 0.6rem 1rem; font-size: 0.82rem; color: #7DD3FC; margin-top: 0.8rem; display:flex; align-items:center; gap:0.55rem;">
-            {svg_icon('info', '#7DD3FC', 16)}
+        <div class="gp-decision-banner {banner_cls}" role="status">
             <div>
-                <strong>Telemetry Note:</strong> Entered frequency ({sessions_per_week} sessions) and duration ({avg_session_duration} mins) imply ~{implied_playtime:.1f} hours/week versus entered playtime ({playtime_hours} hrs). The Random Forest model evaluates each feature independently.
+                <div class="gp-decision-title" style="color: {accent};">
+                    <span>{tier_icon}</span>
+                    {tier_label}
+                </div>
+                <div class="gp-decision-desc">{tier_desc}</div>
+            </div>
+            <span class="gp-decision-badge" style="background:rgba(255,255,255,0.06); color:{accent}; border: 1px solid {accent};">
+                {class_label}
+            </span>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # 2. Executive 4-Metric Grid
+        st.markdown(f"""
+        <div class="gp-metric-grid">
+            <div class="gp-metric-box">
+                <div class="gp-metric-box-label">Classification</div>
+                <div class="gp-metric-box-val" style="color: {accent};">{class_label}</div>
+                <div class="gp-metric-box-sub">Engagement-based retention proxy</div>
+            </div>
+            <div class="gp-metric-box">
+                <div class="gp-metric-box-label">Retention Probability</div>
+                <div class="gp-metric-box-val" style="color: #62D6A5;">{prob_retained:.1f}%</div>
+                <div class="gp-metric-box-sub">Mean of tree votes</div>
+            </div>
+            <div class="gp-metric-box">
+                <div class="gp-metric-box-label">At-Risk Probability</div>
+                <div class="gp-metric-box-val" style="color: #FF5B55;">{prob_risk:.1f}%</div>
+                <div class="gp-metric-box-sub">Low-engagement likelihood</div>
+            </div>
+            <div class="gp-metric-box">
+                <div class="gp-metric-box-label">Model Confidence</div>
+                <div class="gp-metric-box-val" style="color: #7DD3FC;">{confidence:.1f}%</div>
+                <div class="gp-metric-box-sub">{band.capitalize()} signal (strong ≥ {STRONG_SIGNAL_THRESHOLD:.0f}%)</div>
             </div>
         </div>
         """, unsafe_allow_html=True)
 
-    # --------------------------------------------------------------------------
-    # PREDICTION EXECUTION & EXECUTIVE RESULTS PANEL
-    # --------------------------------------------------------------------------
-    if analyze_clicked:
-        if not model_loaded:
-            st.error("Model engine is currently unavailable. Please verify models/gaming_retention_model.joblib exists.")
-        else:
-            input_dict = {
-                "Age": int(age),
-                "Gender": str(gender),
-                "Location": str(location),
-                "GameGenre": str(game_genre),
-                "PlayTimeHours": float(playtime_hours),
-                "InGamePurchases": int(in_game_purchases),
-                "GameDifficulty": str(game_difficulty),
-                "SessionsPerWeek": int(sessions_per_week),
-                "AvgSessionDurationMinutes": int(avg_session_duration),
-                "PlayerLevel": int(player_level),
-                "AchievementsUnlocked": int(achievements_unlocked)
-            }
-            input_df = pd.DataFrame([input_dict])[EXPECTED_FEATURES]
+        # 3. Probability Balance Bar (segments always sum to exactly 100%)
+        st.markdown(f"#### <span style='display:inline-flex; align-items:center; gap:0.45rem;'>{svg_icon('scale', '#7DD3FC', 18)} Retention vs. At-Risk Probability Balance</span>", unsafe_allow_html=True)
+        retained_color = "#62D6A5"
+        risk_color = "#FF5B55"
+        st.markdown(f"""
+        <div style="margin: 0.75rem 0 0.5rem 0;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+                <span style="font-size:0.84rem; font-weight:600; color:{retained_color}; white-space:nowrap;">&#x2713; Retained: {prob_retained:.1f}%</span>
+                <span style="font-size:0.84rem; font-weight:600; color:{risk_color}; white-space:nowrap;">&#x26a0; At Risk: {prob_risk:.1f}%</span>
+            </div>
+            <div role="img" aria-label="Retained {prob_retained:.1f} percent, at risk {prob_risk:.1f} percent"
+                 style="width:100%; background:#1B2028; border-radius:8px; height:16px; overflow:hidden; border:1px solid #2A3039; display:flex;">
+                <div style="width:{prob_retained:.2f}%; background:{retained_color};"></div>
+                <div style="width:{100 - prob_retained:.2f}%; background:{risk_color};"></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:0.35rem;">
+                <span style="font-size:0.72rem; color:#8A94A3;">Engaged &amp; Active</span>
+                <span style="font-size:0.72rem; color:#8A94A3;">Disengagement Risk</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
-            try:
-                # Real ML Model Inference
-                pred_binary = pipeline.predict(input_df)[0]
-                pred_probs = pipeline.predict_proba(input_df)[0]
+        # 4. LiveOps Action Plan & Benchmark Comparison
+        c_act, c_bench = st.columns([1.1, 1])
+        sess_avg = DATASET_BENCHMARKS["SessionsPerWeek"]
+        dur_avg = DATASET_BENCHMARKS["AvgSessionDurationMinutes"]
+        driver_line = (
+            f"<strong>Observed Telemetry:</strong> {inp['SessionsPerWeek']} sessions/week "
+            f"(dataset avg {sess_avg:.1f}) and {inp['AvgSessionDurationMinutes']} min per session "
+            f"(dataset avg {dur_avg:.1f}), the two strongest model drivers."
+        )
 
-                prob_risk = float(pred_probs[0]) * 100
-                prob_retained = float(pred_probs[1]) * 100
-
-                # Granular Engagement Tier Mapping
-                if pred_binary == 1:
-                    if prob_retained >= 72.0:
-                        engagement_tier = "High"
-                        tier_label = "HIGH ENGAGEMENT (RETAINED)"
-                        tier_desc = f"Optimal session consistency and strong gameplay commitment detected. Retention probability is {prob_retained:.1f}%."
-                        banner_cls = "gp-banner-high"
-                        badge_bg = "rgba(199, 243, 107, 0.2)"
-                        badge_color = "#C7F36B"
-                        badge_border = "#C7F36B"
-                        cohort_color = "#C7F36B"
-                        tier_icon = svg_icon("star", "#C7F36B", 22)
-                    else:
-                        engagement_tier = "Medium"
-                        tier_label = "MODERATE ENGAGEMENT (RETAINED)"
-                        tier_desc = f"Steady gameplay habits identified with moderate session frequency. Retention likelihood is {prob_retained:.1f}%."
-                        banner_cls = "gp-banner-med"
-                        badge_bg = "rgba(243, 201, 105, 0.2)"
-                        badge_color = "#F3C969"
-                        badge_border = "#F3C969"
-                        cohort_color = "#F3C969"
-                        tier_icon = svg_icon("shield", "#F3C969", 22)
-                else:
-                    engagement_tier = "Low"
-                    tier_label = "CRITICAL CHURN HAZARD (AT RISK)"
-                    tier_desc = f"Severe disengagement telemetry identified. Churn hazard probability is {prob_risk:.1f}%."
-                    banner_cls = "gp-banner-low"
-                    badge_bg = "rgba(255, 91, 85, 0.2)"
-                    badge_color = "#FF5B55"
-                    badge_border = "#FF5B55"
-                    cohort_color = "#FF5B55"
-                    tier_icon = svg_icon("alert", "#FF5B55", 22)
-
-                # 1. Decision Hero Banner
-                st.markdown(f"""
-                <div class="gp-decision-banner {banner_cls}">
-                    <div>
-                        <div class="gp-decision-title" style="color: {badge_color};">
-                            <span>{tier_icon}</span>
-                            {tier_label}
-                        </div>
-                        <div class="gp-decision-desc">{tier_desc}</div>
-                    </div>
-                    <span class="gp-decision-badge" style="background:{badge_bg}; color:{badge_color}; border: 1px solid {badge_border};">
-                        {engagement_tier.upper()} ENGAGEMENT
-                    </span>
+        with c_act:
+            st.markdown(f"#### <span style='display:inline-flex; align-items:center; gap:0.45rem;'>{svg_icon('lightbulb', '#F3C969', 18)} LiveOps Strategic Intervention</span>", unsafe_allow_html=True)
+            if pred_binary == 1 and strong_signal:
+                strat_title = "Strategy: VIP Loyalty & Guild Leadership"
+                strat_body = (
+                    "• <strong>LiveOps Action:</strong> Unlock prestige seasonal battle-pass tiers, introduce exclusive competitive leaderboards, and surface clan guild features.<br>"
+                    "• <strong>Monetization:</strong> Good candidate for expansion bundles and limited cosmetic drops."
+                )
+            elif pred_binary == 1:
+                strat_title = "Strategy: Progression Nurturing & Habit Reinforcement"
+                strat_body = (
+                    "• <strong>LiveOps Action:</strong> Deliver targeted mid-week challenge bonuses, daily login streak multipliers, and achievement milestone alerts.<br>"
+                    "• <strong>UX Optimization:</strong> Streamline matchmaking wait times to encourage back-to-back matches."
+                )
+            else:
+                strat_title = "Strategy: Immediate Re-engagement & Friction Reduction"
+                strat_body = (
+                    "• <strong>LiveOps Action:</strong> Send a personalized push notification offering a <strong>Welcome-Back Reward Bundle</strong> and simplified entry challenges.<br>"
+                    "• <strong>Dynamic Difficulty Tuning (DDA):</strong> Check for failure walls or difficulty spikes that may be causing early exit."
+                )
+            st.markdown(f"""
+            <div class="gp-action-card" style="border-left: 4px solid {accent};">
+                <div style="font-size:0.76rem; font-weight:700; color:{accent}; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.4rem;">
+                    {strat_title}
                 </div>
-                """, unsafe_allow_html=True)
-
-                # 2. Executive 4-Metric Grid
-                st.markdown(f"""
-                <div class="gp-metric-grid">
-                    <div class="gp-metric-box">
-                        <div class="gp-metric-box-label">Classification</div>
-                        <div class="gp-metric-box-val" style="color: {cohort_color};">{engagement_tier.upper()}</div>
-                        <div class="gp-metric-box-sub">Engagement Proxy Tier</div>
-                    </div>
-                    <div class="gp-metric-box">
-                        <div class="gp-metric-box-label">Retention Probability</div>
-                        <div class="gp-metric-box-val" style="color: #62D6A5;">{prob_retained:.1f}%</div>
-                        <div class="gp-metric-box-sub">Soft Probability Average</div>
-                    </div>
-                    <div class="gp-metric-box">
-                        <div class="gp-metric-box-label">Churn Hazard</div>
-                        <div class="gp-metric-box-val" style="color: #FF5B55;">{prob_risk:.1f}%</div>
-                        <div class="gp-metric-box-sub">Attrition Probability</div>
-                    </div>
-                    <div class="gp-metric-box">
-                        <div class="gp-metric-box-label">Ensemble Engine</div>
-                        <div class="gp-metric-box-val" style="color: #7DD3FC;">150 Trees</div>
-                        <div class="gp-metric-box-sub">Balanced Random Forest</div>
-                    </div>
+                <div style="font-size:0.88rem; color:#A6AFBD; line-height:1.5;">
+                    • {driver_line}<br>
+                    {strat_body}
                 </div>
-                """, unsafe_allow_html=True)
+            </div>
+            """, unsafe_allow_html=True)
 
-                # 3. Dual Probability Balance Progress Bars
-                st.markdown(f"#### <span style='display:inline-flex; align-items:center; gap:0.45rem;'>{svg_icon('scale', '#7DD3FC', 18)} Retention vs. Churn Hazard Probability Balance</span>", unsafe_allow_html=True)
-                retained_color = "#62D6A5"
-                risk_color = "#FF5B55"
-                st.markdown(f"""
-                <div style="margin: 0.75rem 0 0.5rem 0;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
-                        <span style="font-size:0.84rem; font-weight:600; color:{retained_color}; white-space:nowrap;">&#x2713; Retained: {prob_retained:.1f}%</span>
-                        <span style="font-size:0.84rem; font-weight:600; color:{risk_color}; white-space:nowrap;">&#x26a0; Churn Hazard: {prob_risk:.1f}%</span>
-                    </div>
-                    <div style="width:100%; background:#1B2028; border-radius:8px; height:16px; overflow:hidden; border:1px solid #2A3039;">
-                        <div style="display:flex; height:100%;">
-                            <div style="width:{max(prob_retained, 0.5):.2f}%; background:{retained_color}; border-radius:8px 0 0 8px; transition:width 0.4s ease;"></div>
-                            <div style="width:{max(prob_risk, 0.5):.2f}%; background:{risk_color}; border-radius:0 8px 8px 0; transition:width 0.4s ease;"></div>
-                        </div>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; margin-top:0.35rem;">
-                        <span style="font-size:0.72rem; color:#747F8F;">Engaged &amp; Active</span>
-                        <span style="font-size:0.72rem; color:#747F8F;">Disengagement Risk</span>
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
-                # 4. LiveOps Action Plan & Benchmark Comparison
-                c_act, c_bench = st.columns([1.1, 1])
+        with c_bench:
+            st.markdown(f"#### <span style='display:inline-flex; align-items:center; gap:0.45rem;'>{svg_icon('analytics', '#FF5B55', 18)} Telemetry vs. Global Dataset Baseline</span>", unsafe_allow_html=True)
+            comp_df = pd.DataFrame({
+                "Telemetry Attribute": ["Weekly Sessions", "Session Duration (min)", "Playtime (hrs)", "Player Level", "Achievements"],
+                "Current Player": [
+                    inp["SessionsPerWeek"], inp["AvgSessionDurationMinutes"], inp["PlayTimeHours"],
+                    inp["PlayerLevel"], inp["AchievementsUnlocked"]
+                ],
+                "Dataset Baseline": [
+                    DATASET_BENCHMARKS["SessionsPerWeek"],
+                    DATASET_BENCHMARKS["AvgSessionDurationMinutes"],
+                    DATASET_BENCHMARKS["PlayTimeHours"],
+                    DATASET_BENCHMARKS["PlayerLevel"],
+                    DATASET_BENCHMARKS["AchievementsUnlocked"],
+                ]
+            })
+            comp_df["Current Player"] = comp_df["Current Player"].astype(float)
+            variance = comp_df["Current Player"] - comp_df["Dataset Baseline"]
+            comp_df["Benchmark"] = variance.apply(lambda v: f"+{v:.1f}" if v > 0 else f"{v:.1f}")
 
-                with c_act:
-                    st.markdown(f"#### <span style='display:inline-flex; align-items:center; gap:0.45rem;'>{svg_icon('lightbulb', '#F3C969', 18)} LiveOps Strategic Intervention</span>", unsafe_allow_html=True)
-                    if engagement_tier == "High":
-                        st.markdown("""
-                        <div class="gp-action-card" style="border-left: 4px solid #C7F36B;">
-                            <div style="font-size:0.76rem; font-weight:700; color:#C7F36B; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.4rem;">
-                                Strategy: VIP Loyalty & Guild Leadership
-                            </div>
-                            <div style="font-size:0.88rem; color:#A6AFBD; line-height:1.5;">
-                                • <strong>Primary Driver:</strong> High weekly session frequency (&gt;12) and sustained gameplay firmly anchor this player.<br>
-                                • <strong>LiveOps Action:</strong> Unlock prestige seasonal battle-pass tiers, introduce exclusive competitive leaderboards, and surface clan guild features.<br>
-                                • <strong>Monetization Propensity:</strong> High conversion rate for expansion bundles and limited cosmetic drops.
-                            </div>
-                        </div>
-                        """, unsafe_allow_html=True)
-                    elif engagement_tier == "Medium":
-                        st.markdown("""
-                        <div class="gp-action-card" style="border-left: 4px solid #F3C969;">
-                            <div style="font-size:0.76rem; font-weight:700; color:#F3C969; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.4rem;">
-                                Strategy: Progression Nurturing & Habit Reinforcement
-                            </div>
-                            <div style="font-size:0.88rem; color:#A6AFBD; line-height:1.5;">
-                                • <strong>Primary Driver:</strong> Consistent weekly participation with room for session depth improvement.<br>
-                                • <strong>LiveOps Action:</strong> Deliver targeted mid-week challenge bonuses, daily login streak multipliers, and achievement milestone alerts.<br>
-                                • <strong>UX Optimization:</strong> Streamline matchmaking wait times to encourage back-to-back matches.
-                            </div>
-                        </div>
-                        """, unsafe_allow_html=True)
-                    else:
-                        st.markdown("""
-                        <div class="gp-action-card" style="border-left: 4px solid #FF5B55;">
-                            <div style="font-size:0.76rem; font-weight:700; color:#FF5B55; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.4rem;">
-                                Strategy: Immediate Re-engagement & Friction Reduction
-                            </div>
-                            <div style="font-size:0.88rem; color:#A6AFBD; line-height:1.5;">
-                                • <strong>Primary Driver:</strong> Critically low weekly session count (&lt; 4) and short durations indicate churn risk.<br>
-                                • <strong>LiveOps Action:</strong> Dispatch a personalized push notification offering a <strong>Welcome-Back Reward Bundle</strong> and simplified entry challenges.<br>
-                                • <strong>Dynamic Difficulty Tuning (DDA):</strong> Check for failure walls or difficulty spikes that may be causing early exit.
-                            </div>
-                        </div>
-                        """, unsafe_allow_html=True)
-
-                with c_bench:
-                    st.markdown(f"#### <span style='display:inline-flex; align-items:center; gap:0.45rem;'>{svg_icon('analytics', '#FF5B55', 18)} Telemetry vs. Global Dataset Baseline</span>", unsafe_allow_html=True)
-                    comp_df = pd.DataFrame({
-                        "Telemetry Attribute": ["Weekly Sessions", "Session Duration (min)", "Playtime (hrs)", "Player Level"],
-                        "Current Player": [sessions_per_week, avg_session_duration, playtime_hours, player_level],
-                        "Dataset Baseline": [
-                            DATASET_BENCHMARKS["SessionsPerWeek"],
-                            DATASET_BENCHMARKS["AvgSessionDurationMinutes"],
-                            DATASET_BENCHMARKS["PlayTimeHours"],
-                            DATASET_BENCHMARKS["PlayerLevel"]
-                        ]
-                    })
-                    comp_df["Variance"] = comp_df["Current Player"] - comp_df["Dataset Baseline"]
-                    comp_df["Benchmark"] = comp_df["Variance"].apply(lambda v: f"+{v:.1f}" if v > 0 else f"{v:.1f}")
-
-                    st.dataframe(
-                        comp_df[["Telemetry Attribute", "Current Player", "Dataset Baseline", "Benchmark"]],
-                        hide_index=True,
-                        **_stretch_kwargs(st.dataframe)
-                    )
-
-            except Exception as e:
-                st.error(f"Inference execution error: {str(e)}")
+            st.dataframe(
+                comp_df[["Telemetry Attribute", "Current Player", "Dataset Baseline", "Benchmark"]],
+                hide_index=True,
+                column_config={
+                    "Current Player": st.column_config.NumberColumn(format="%.1f"),
+                    "Dataset Baseline": st.column_config.NumberColumn(format="%.2f"),
+                },
+                **_stretch_kwargs(st.dataframe)
+            )
     else:
         # Professional Empty State
         st.markdown(f"""
@@ -1371,6 +1546,8 @@ if st.session_state["current_page"] == "Player Simulator":
 # PAGE 2: ANALYTICS & INSIGHTS
 # ==============================================================================
 elif st.session_state["current_page"] == "Analytics & Insights":
+    n_records_label = f"{len(dataset):,}" if dataset is not None else "all"
+
     # Contextual Header
     st.markdown(f"""
     <div class="gp-page-header">
@@ -1382,82 +1559,90 @@ elif st.session_state["current_page"] == "Analytics & Insights":
                 <h1>Analytics and Insights</h1>
                 <div class="gp-title-underline"></div>
                 <p class="gp-subtitle">Explore the behavioral patterns behind player engagement.</p>
-                <div class="gp-tagline">Descriptive telemetry distributions across 40,034 benchmark records.</div>
+                <div class="gp-tagline">Descriptive telemetry distributions across {n_records_label} benchmark records.</div>
             </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-    # Top KPI Metrics Cards
-    st.markdown("""
+    if dataset is None:
+        st.error(f"Dataset not found at {DATA_PATH.relative_to(BASE_DIR)}. Analytics are unavailable.")
+        st.stop()
+
+    summary = compute_dataset_summary(dataset)
+    tier_names = ["Low", "Medium", "High"]
+    tier_colors = ["#FF5B55", "#F3C969", "#C7F36B"]
+    tier_labels = [f"{t} Engagement" for t in tier_names]
+    share = summary["tier_share"]
+    means = summary["means"]
+    integrity_clean = summary["n_missing"] == 0 and summary["n_duplicates"] == 0
+
+    # Top KPI Metrics Cards (computed from the dataset)
+    st.markdown(f"""
     <div class="gp-kpi-grid">
         <div class="gp-kpi-card">
             <div class="gp-kpi-title">Total Player Records</div>
-            <div class="gp-kpi-val">40,034</div>
-            <div class="gp-kpi-caption">Canonical Benchmark Dataset</div>
+            <div class="gp-kpi-val">{summary["n_records"]:,}</div>
+            <div class="gp-kpi-caption">Online Gaming Behavior Dataset</div>
         </div>
         <div class="gp-kpi-card">
             <div class="gp-kpi-title">Evaluated Features</div>
-            <div class="gp-kpi-val" style="color:#7DD3FC;">11 Inputs</div>
-            <div class="gp-kpi-caption">21 One-Hot Encoded Dimensions</div>
+            <div class="gp-kpi-val" style="color:#7DD3FC;">{len(EXPECTED_FEATURES)} Inputs</div>
+            <div class="gp-kpi-caption">{N_ENGINEERED} Engineered Dimensions (after one-hot encoding)</div>
         </div>
         <div class="gp-kpi-card">
             <div class="gp-kpi-title">Engagement Tiers</div>
             <div class="gp-kpi-val" style="color:#F3C969;">3 Cohorts</div>
-            <div class="gp-kpi-caption">Low (25.8%), Med (48.4%), High (25.8%)</div>
+            <div class="gp-kpi-caption">Low ({share["Low"]:.1f}%), Med ({share["Medium"]:.1f}%), High ({share["High"]:.1f}%)</div>
         </div>
         <div class="gp-kpi-card">
             <div class="gp-kpi-title">Data Integrity</div>
-            <div class="gp-kpi-val" style="color:#62D6A5;">100% Clean</div>
-            <div class="gp-kpi-caption">0 Missing Values · 0 Duplicates</div>
+            <div class="gp-kpi-val" style="color:{'#62D6A5' if integrity_clean else '#F3C969'};">{'100% Clean' if integrity_clean else 'Needs Review'}</div>
+            <div class="gp-kpi-caption">{summary["n_missing"]:,} Missing Values · {summary["n_duplicates"]:,} Duplicates</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+    chart_layout = dict(
+        template="plotly_dark",
+        paper_bgcolor="#15191F",
+        plot_bgcolor="#15191F",
+        font=dict(family="Inter, -apple-system, sans-serif", color="#A6AFBD"),
+        height=300,
+    )
 
     # Visualizations Grid
     col_c1, col_c2 = st.columns(2)
 
     with col_c1:
         st.markdown("#### 1. Engagement Tier Distribution")
-        # Interactive Plotly Donut Chart
         fig_dist = go.Figure(data=[go.Pie(
-            labels=["Low Engagement", "Medium Engagement", "High Engagement"],
-            values=[10324, 19374, 10336],
+            labels=tier_labels,
+            values=summary["tier_counts"].tolist(),
             hole=0.6,
-            marker=dict(colors=["#FF5B55", "#F3C969", "#C7F36B"]),
+            marker=dict(colors=tier_colors),
             textinfo="label+percent",
-            hoverinfo="label+value+percent"
+            hoverinfo="label+value+percent",
+            sort=False
         )])
-        fig_dist.update_layout(
-            template="plotly_dark",
-            paper_bgcolor="#15191F",
-            plot_bgcolor="#15191F",
-            font=dict(family="Inter", color="#A6AFBD"),
-            margin=dict(l=20, r=20, t=30, b=20),
-            showlegend=False,
-            height=300
-        )
+        fig_dist.update_layout(**chart_layout, margin=dict(l=20, r=20, t=30, b=20), showlegend=False)
         st.plotly_chart(fig_dist, **_stretch_kwargs(st.plotly_chart))
 
     with col_c2:
         st.markdown("#### 2. Weekly Sessions by Engagement Tier")
-        # Weekly sessions bar chart
+        sess = means["SessionsPerWeek"].tolist()
         fig_sess = go.Figure(data=[go.Bar(
-            x=["Low Engagement", "Medium Engagement", "High Engagement"],
-            y=[4.53, 9.55, 14.25],
-            text=["4.5 sessions", "9.6 sessions", "14.3 sessions"],
+            x=tier_labels,
+            y=sess,
+            text=[f"{v:.1f} sessions" for v in sess],
             textposition="auto",
-            marker=dict(color=["#FF5B55", "#F3C969", "#C7F36B"])
+            marker=dict(color=tier_colors)
         )])
         fig_sess.update_layout(
-            template="plotly_dark",
-            paper_bgcolor="#15191F",
-            plot_bgcolor="#15191F",
-            font=dict(family="Inter", color="#A6AFBD"),
+            **chart_layout,
             yaxis=dict(title="Mean Sessions / Week", gridcolor="#232831"),
             xaxis=dict(title=None),
             margin=dict(l=20, r=20, t=30, b=20),
-            height=300
         )
         st.plotly_chart(fig_sess, **_stretch_kwargs(st.plotly_chart))
 
@@ -1467,62 +1652,49 @@ elif st.session_state["current_page"] == "Analytics & Insights":
 
     with col_c3:
         st.markdown("#### 3. Average Session Length (Minutes)")
-        # Session duration bar chart
+        dur = means["AvgSessionDurationMinutes"].tolist()
         fig_dur = go.Figure(data=[go.Bar(
-            x=["Low Engagement", "Medium Engagement", "High Engagement"],
-            y=[66.88, 89.86, 131.92],
-            text=["66.9 mins", "89.9 mins", "131.9 mins"],
+            x=tier_labels,
+            y=dur,
+            text=[f"{v:.1f} mins" for v in dur],
             textposition="auto",
-            marker=dict(color=["#FF5B55", "#F3C969", "#C7F36B"])
+            marker=dict(color=tier_colors)
         )])
         fig_dur.update_layout(
-            template="plotly_dark",
-            paper_bgcolor="#15191F",
-            plot_bgcolor="#15191F",
-            font=dict(family="Inter", color="#A6AFBD"),
+            **chart_layout,
             yaxis=dict(title="Mean Session Duration (mins)", gridcolor="#232831"),
             xaxis=dict(title=None),
             margin=dict(l=20, r=20, t=30, b=20),
-            height=300
         )
         st.plotly_chart(fig_dur, **_stretch_kwargs(st.plotly_chart))
 
     with col_c4:
         st.markdown("#### 4. Behavioral Feature Correlation Matrix")
-        # Real correlation matrix between numerical attributes
-        corr_matrix = [
-            [1.00, -0.01, 0.01, 0.01, 0.01, -0.01],
-            [-0.01, 1.00, 0.00, 0.00, 0.00, 0.00],
-            [0.01, 0.00, 1.00, 0.51, 0.34, 0.07],
-            [0.01, 0.00, 0.51, 1.00, 0.34, 0.08],
-            [0.01, 0.00, 0.34, 0.34, 1.00, 0.07],
-            [-0.01, 0.00, 0.07, 0.08, 0.07, 1.00]
-        ]
-        corr_labels = ["Age", "Playtime", "Target", "Sessions", "Duration", "Level"]
-        
+        # Pearson correlations computed live from the dataset (Target = retention proxy)
+        corr_vals = summary["corr"].values
+        corr_labels = summary["corr_labels"]
         fig_corr = go.Figure(data=go.Heatmap(
-            z=corr_matrix,
+            z=corr_vals,
             x=corr_labels,
             y=corr_labels,
-            colorscale=[[0, "#101318"], [0.5, "#15191F"], [1, "#FF5B55"]],
-            text=np.round(corr_matrix, 2),
+            zmin=-1, zmax=1,
+            colorscale=[[0, "#7DD3FC"], [0.5, "#15191F"], [1, "#FF5B55"]],
+            text=np.round(corr_vals, 2),
             texttemplate="%{text}",
             showscale=False
         ))
-        fig_corr.update_layout(
-            template="plotly_dark",
-            paper_bgcolor="#15191F",
-            plot_bgcolor="#15191F",
-            font=dict(family="Inter", color="#A6AFBD"),
-            margin=dict(l=20, r=20, t=30, b=20),
-            height=300
-        )
+        fig_corr.update_layout(**chart_layout, margin=dict(l=20, r=20, t=30, b=20), yaxis=dict(autorange="reversed"))
         st.plotly_chart(fig_corr, **_stretch_kwargs(st.plotly_chart))
 
-    # Analytical Observations Cards
+    # Analytical Observations Cards (numbers derived from the data and the loaded model)
+    fi_lookup = dict(zip(df_domain_fi["Domain Feature"], df_domain_fi["Cumulative Gini"]))
+    sess_imp = fi_lookup.get("SessionsPerWeek", 0.0)
+    dur_imp = fi_lookup.get("AvgSessionDurationMinutes", 0.0)
+    demo_imp = sum(fi_lookup.get(f, 0.0) for f in ("Age", "Gender", "Location"))
+
     st.markdown("---")
     st.markdown("#### Empirical Findings & Observations")
-    
+
     col_ob1, col_ob2 = st.columns(2)
     with col_ob1:
         st.markdown(f"""
@@ -1531,8 +1703,8 @@ elif st.session_state["current_page"] == "Analytics & Insights":
                 {svg_icon('target', '#FF5B55', 18)}
                 <strong>Telemetry Habits Drive Engagement</strong>
             </div>
-            • <code>SessionsPerWeek</code> (42.1%) and <code>AvgSessionDurationMinutes</code> (37.4%) together represent <strong>~80% of predictive power</strong>.<br>
-            • High-engagement players log an average of <strong>14.25 sessions per week</strong> (vs. 4.53 for at-risk cohorts) and remain in game for <strong>131.9 minutes per session</strong> (vs. 66.9 minutes).
+            • <code>SessionsPerWeek</code> ({sess_imp:.1f}%) and <code>AvgSessionDurationMinutes</code> ({dur_imp:.1f}%) together represent <strong>~{sess_imp + dur_imp:.0f}% of the model's Gini importance</strong>.<br>
+            • High-engagement players log an average of <strong>{means.loc["High", "SessionsPerWeek"]:.2f} sessions per week</strong> (vs. {means.loc["Low", "SessionsPerWeek"]:.2f} for low-engagement players) and stay <strong>{means.loc["High", "AvgSessionDurationMinutes"]:.1f} minutes per session</strong> (vs. {means.loc["Low", "AvgSessionDurationMinutes"]:.1f} minutes).
         </div>
         """, unsafe_allow_html=True)
     with col_ob2:
@@ -1540,10 +1712,10 @@ elif st.session_state["current_page"] == "Analytics & Insights":
         <div style="background:#15191F; border:1px solid #2A3039; border-left:4px solid #7DD3FC; border-radius:10px; padding:1.1rem; font-size:0.88rem; line-height:1.5;">
             <div style="display:flex; align-items:center; gap:0.45rem; margin-bottom:0.4rem;">
                 {svg_icon('globe', '#7DD3FC', 18)}
-                <strong>Demographic Invariance</strong>
+                <strong>Demographics Carry Little Signal</strong>
             </div>
-            • Demographics (Age, Gender, Server Location) contribute <strong>less than 4% total Gini importance</strong>.<br>
-            • Player engagement loops operate identically regardless of age cohort or geographic region once telemetry habits are established.
+            • Demographics (Age, Gender, Server Location) contribute <strong>{demo_imp:.1f}% of total Gini importance</strong>.<br>
+            • In this dataset, engagement is explained mostly by session habits rather than age cohort or region.
         </div>
         """, unsafe_allow_html=True)
 
@@ -1611,20 +1783,20 @@ elif st.session_state["current_page"] == "Model Audit":
 
     with col_ov2:
         st.markdown("#### Prediction Pipeline Architecture")
-        st.markdown("""
-        <div style="background:#15191F; border:1px solid #2A3039; border-radius:12px; padding:1.2rem; font-family:'JetBrains Mono', monospace; font-size:0.82rem; line-height:1.6;">
+        st.markdown(f"""
+        <div style="background:#15191F; border:1px solid #2A3039; border-radius:12px; padding:1.2rem; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:0.82rem; line-height:1.6;">
             <div style="color:#7DD3FC; font-weight:600;">[1] PLAYER TELEMETRY INPUT</div>
-            <div style="color:#747F8F; padding-left:1.5rem;">│ (11 Raw Behavioral & Demographic Attributes)</div>
+            <div style="color:#8A94A3; padding-left:1.5rem;">│ (11 Raw Behavioral & Demographic Attributes)</div>
             <div style="color:#C7F36B; font-weight:600;">[2] COLUMNTRANSFORMER PREPROCESSING</div>
-            <div style="color:#747F8F; padding-left:1.5rem;">├── Median Imputation (7 Numerical Features)</div>
-            <div style="color:#747F8F; padding-left:1.5rem;">└── OneHotEncoding (4 Categoricals → 14 Dummy Levels)</div>
-            <div style="color:#747F8F; padding-left:1.5rem;">│ (21 Total Engineered Dimensions)</div>
-            <div style="color:#FF5B55; font-weight:600;">[3] RANDOM FOREST ENSEMBLE (150 TREES)</div>
-            <div style="color:#747F8F; padding-left:1.5rem;">├── Bootstrapped Bagging (min_samples_split=5)</div>
-            <div style="color:#747F8F; padding-left:1.5rem;">└── Balanced Penalty Weights: w_j = N / (2 * N_j)</div>
-            <div style="color:#747F8F; padding-left:1.5rem;">│ (Soft Probability Averaging)</div>
+            <div style="color:#8A94A3; padding-left:1.5rem;">├── Median Imputation (7 Numerical Features)</div>
+            <div style="color:#8A94A3; padding-left:1.5rem;">└── OneHotEncoding (4 Categoricals → 14 Dummy Levels)</div>
+            <div style="color:#8A94A3; padding-left:1.5rem;">│ ({N_ENGINEERED} Total Engineered Dimensions)</div>
+            <div style="color:#FF5B55; font-weight:600;">[3] RANDOM FOREST ENSEMBLE ({TREES_LABEL.upper()})</div>
+            <div style="color:#8A94A3; padding-left:1.5rem;">├── Bootstrapped Bagging (min_samples_split=5)</div>
+            <div style="color:#8A94A3; padding-left:1.5rem;">└── Balanced Penalty Weights: w_j = N / (2 * N_j)</div>
+            <div style="color:#8A94A3; padding-left:1.5rem;">│ (Soft Probability Averaging)</div>
             <div style="color:#F3C969; font-weight:600;">[4] RETENTION RISK PROXY CLASSIFICATION</div>
-            <div style="color:#747F8F; padding-left:1.5rem;">└── Class 1 (Retained) vs Class 0 (At Risk Churn Hazard)</div>
+            <div style="color:#8A94A3; padding-left:1.5rem;">└── Class 1 (Retained) vs Class 0 (At Risk)</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1633,56 +1805,75 @@ elif st.session_state["current_page"] == "Model Audit":
     # Section C: Holdout Evaluation Scorecard & Confusion Matrix
     col_sc1, col_sc2 = st.columns(2)
 
-    with col_sc1:
-        st.markdown("#### Holdout Test Evaluation Scorecard ($N = 8,007$)")
-        acc_v = test_metrics.get("accuracy", 0.94617)
-        prec_v = test_metrics.get("precision", 0.96553)
-        rec_v = test_metrics.get("recall", 0.96180)
-        f1_v = test_metrics.get("f1_score", 0.96366)
-        roc_v = test_metrics.get("roc_auc", 0.94301)
-        rec_risk_v = test_metrics.get("recall_at_risk", 0.90121)
+    def _pct(key):
+        v = test_metrics.get(key)
+        return f"{v * 100:.2f}%" if v is not None else "n/a"
 
+    n_test = test_metrics.get("n_test") or (metadata or {}).get("testing_samples")
+    n_test_label = f" (N = {n_test:,})" if n_test else ""
+    source_note = (
+        "Recomputed live on the stratified 20% holdout split."
+        if holdout_eval is not None else
+        "Taken from saved model metadata (live recomputation unavailable)."
+    )
+
+    with col_sc1:
+        st.markdown(f"#### Holdout Test Evaluation Scorecard{n_test_label}")
+        roc_v = test_metrics.get("roc_auc")
         perf_data = {
             "Evaluation Metric": [
-                "Overall Accuracy", "Precision (Retained)", "Recall (Retained)", 
-                "F1-Score (Retained)", "Recall (At Risk Class)", "ROC-AUC Score"
+                "Overall Accuracy", "Precision (Retained)", "Recall (Retained)",
+                "F1-Score (Retained)", "Macro F1 (both classes)", "Recall (At Risk Class)", "ROC-AUC Score"
             ],
             "Score": [
-                f"{acc_v * 100:.2f}%", f"{prec_v * 100:.2f}%", f"{rec_v * 100:.2f}%",
-                f"{f1_v * 100:.2f}%", f"{rec_risk_v * 100:.2f}%", f"{roc_v:.4f}"
+                _pct("accuracy"), _pct("precision"), _pct("recall"),
+                _pct("f1_score"), _pct("macro_f1"), _pct("recall_at_risk"),
+                f"{roc_v:.4f}" if roc_v is not None else "n/a"
             ],
-            "Industry Benchmark": ["> 85.0%", "> 90.0%", "> 90.0%", "> 90.0%", "> 80.0%", "> 0.8500"]
+            "Target": ["> 85.0%", "> 90.0%", "> 90.0%", "> 90.0%", "> 85.0%", "> 80.0%", "> 0.8500"]
         }
         st.dataframe(pd.DataFrame(perf_data), hide_index=True, **_stretch_kwargs(st.dataframe))
+        st.caption(source_note)
 
     with col_sc2:
         st.markdown("#### Holdout Confusion Matrix Heatmap")
-        # Plotly Confusion Matrix with real counts
-        cm_data = [[1861, 204], [227, 5715]]
-        fig_cm = go.Figure(data=go.Heatmap(
-            z=cm_data,
-            x=["Predicted At Risk", "Predicted Retained"],
-            y=["Actual At Risk", "Actual Retained"],
-            colorscale=[[0, "#101318"], [0.5, "#2A3039"], [1, "#FF5B55"]],
-            text=[["1,861 (90.1%)", "204 (9.9%)"], ["227 (3.8%)", "5,715 (96.2%)"]],
-            texttemplate="%{text}",
-            showscale=False
-        ))
-        fig_cm.update_layout(
-            template="plotly_dark",
-            paper_bgcolor="#15191F",
-            plot_bgcolor="#15191F",
-            font=dict(family="Inter", color="#A6AFBD"),
-            margin=dict(l=30, r=30, t=30, b=30),
-            height=260
-        )
-        st.plotly_chart(fig_cm, **_stretch_kwargs(st.plotly_chart))
+        cm = test_metrics.get("confusion")
+        if cm is not None:
+            cm = np.asarray(cm)
+            row_pct = cm / cm.sum(axis=1, keepdims=True) * 100
+            cell_names = [["Correctly flagged", "Missed (false negative)"],
+                          ["False alarm (false positive)", "Correctly retained"]]
+            cm_text = [
+                [f"{cm[i, j]:,} ({row_pct[i, j]:.1f}%)<br>{cell_names[i][j]}" for j in range(2)]
+                for i in range(2)
+            ]
+            fig_cm = go.Figure(data=go.Heatmap(
+                z=cm,
+                x=["Predicted At Risk", "Predicted Retained"],
+                y=["Actual At Risk", "Actual Retained"],
+                colorscale=[[0, "#101318"], [0.5, "#2A3039"], [1, "#FF5B55"]],
+                text=cm_text,
+                texttemplate="%{text}",
+                hoverinfo="skip",
+                showscale=False
+            ))
+            fig_cm.update_layout(
+                template="plotly_dark",
+                paper_bgcolor="#15191F",
+                plot_bgcolor="#15191F",
+                font=dict(family="Inter, -apple-system, sans-serif", color="#A6AFBD"),
+                margin=dict(l=30, r=30, t=30, b=30),
+                height=260
+            )
+            st.plotly_chart(fig_cm, **_stretch_kwargs(st.plotly_chart))
+            st.caption("Percentages are per actual class (row).")
+        else:
+            st.info("Confusion matrix unavailable: the dataset or model could not be loaded.")
 
     # Section D: Aggregated Feature Importance Ranking
     st.markdown("---")
     st.markdown(f"#### <span style='display:inline-flex; align-items:center; gap:0.45rem;'>{svg_icon('trophy', '#FF5B55', 18)} Feature Importance Analysis (Aggregated Domain View)</span>", unsafe_allow_html=True)
-    
-    df_domain_fi = get_domain_feature_importance(pipeline, metadata)
+
     col_fi1, col_fi2 = st.columns([1, 1.2])
 
     with col_fi1:
@@ -1704,7 +1895,7 @@ elif st.session_state["current_page"] == "Model Audit":
             template="plotly_dark",
             paper_bgcolor="#15191F",
             plot_bgcolor="#15191F",
-            font=dict(family="Inter", color="#A6AFBD"),
+            font=dict(family="Inter, -apple-system, sans-serif", color="#A6AFBD"),
             xaxis=dict(title="Gini Impurity Reduction (%)", gridcolor="#232831"),
             yaxis=dict(title=None),
             margin=dict(l=20, r=20, t=20, b=20),
@@ -1747,11 +1938,12 @@ elif st.session_state["current_page"] == "Methodology & Viva":
 
         with st.expander("2. Dataset & Telemetry Specification", expanded=True):
             st.markdown("""
-            The system is built upon the canonical **Online Gaming Behavior Dataset**:
-            • **Instances:** `40,034` player records.
-            • **Attributes:** `13` features (1 unique identifier, 11 behavioral/demographic inputs, 1 engagement tier).
-            • **Data Integrity:** `0` missing values, `0` duplicate rows.
-            • **Original Source:** `data/online_gaming_behavior_dataset.csv`.
+            The system is built upon the **Online Gaming Behavior Dataset**:
+
+            - **Instances:** `40,034` player records.
+            - **Attributes:** `13` columns (1 unique identifier, 11 behavioral/demographic inputs, 1 engagement tier).
+            - **Data Integrity:** `0` missing values, `0` duplicate rows.
+            - **Source File:** `data/online_gaming_behavior_dataset.csv`.
             """)
 
         with st.expander("3. Operational Retention Proxy Formulation", expanded=True):
@@ -1766,9 +1958,9 @@ elif st.session_state["current_page"] == "Methodology & Viva":
     with col_m2:
         with st.expander("4. Model Selection Justification (Why Random Forest?)", expanded=True):
             st.markdown("""
-            • **Nonlinear Relationships:** Player churn involves complex nonlinear thresholds (e.g., playtime $\\times$ difficulty interactions). Random Forest naturally captures high-order interactions without manual polynomial expansion.
-            • **Scale Invariance:** Decision trees split along single-feature thresholds; omitting feature scalers preserves direct physical interpretability (hours, logins, minutes).
-            • **Class Imbalance Resilience:** `class_weight='balanced'` assigns penalty weights inversely proportional to class frequencies, preventing the 74.2% majority retained class from overwhelming the at-risk minority class.
+            - **Nonlinear Relationships:** Player churn involves complex nonlinear thresholds (e.g., playtime × difficulty interactions). Random Forest naturally captures high-order interactions without manual polynomial expansion.
+            - **Scale Invariance:** Decision trees split along single-feature thresholds; omitting feature scalers preserves direct physical interpretability (hours, logins, minutes).
+            - **Class Imbalance Resilience:** `class_weight='balanced'` assigns penalty weights inversely proportional to class frequencies, preventing the 74.2% majority retained class from overwhelming the at-risk minority class.
             """)
 
         with st.expander("5. Evaluation Philosophy (Why F1-Score over Accuracy?)", expanded=True):
@@ -1778,9 +1970,9 @@ elif st.session_state["current_page"] == "Methodology & Viva":
 
         with st.expander("6. Limitations & Future Technical Roadmap", expanded=True):
             st.markdown("""
-            • **Longitudinal Time-Series:** Incorporate rolling window telemetry (login velocity over 7, 14, 30 days) to model prospective churn trajectory.
-            • **Survival Analysis:** Implement Cox Proportional Hazards to model *time-to-churn* hazard rates.
-            • **Real-Time SHAP:** Integrate TreeSHAP into the dashboard to generate individualized waterfall plots for each specific player input.
+            - **Longitudinal Time-Series:** Incorporate rolling window telemetry (login velocity over 7, 14, 30 days) to model prospective churn trajectory.
+            - **Survival Analysis:** Implement Cox Proportional Hazards to model *time-to-churn* hazard rates.
+            - **Real-Time SHAP:** Integrate TreeSHAP into the dashboard to generate individualized waterfall plots for each specific player input.
             """)
 
     # Technical Viva Defense / Judge Q&A Accordion
@@ -1808,8 +2000,8 @@ elif st.session_state["current_page"] == "Methodology & Viva":
     with q2:
         with st.expander("Q: What is the financial cost trade-off of False Positives vs. False Negatives?"):
             st.markdown("""
-            • **False Negative (At-Risk misclassified as Retained):** Fatal — player abandons game silently, forfeiting customer lifetime value ($LTV \\approx \\$50$).<br>
-            • **False Positive (Retained misclassified as At-Risk):** Negligible — active player merely receives a re-engagement notification or free login gift ($< \\$0.20$).
+            - **False Negative (At-Risk misclassified as Retained):** High cost — the player may leave silently, forfeiting customer lifetime value (LTV ≈ \\$50).
+            - **False Positive (Retained misclassified as At-Risk):** Low cost — an active player merely receives a re-engagement notification or free login gift (under \\$0.20).
             """)
 
         with st.expander("Q: Why did hyperparameter tuning select max_features=None?"):
@@ -1827,12 +2019,12 @@ elif st.session_state["current_page"] == "Methodology & Viva":
 # ==============================================================================
 st.markdown("<hr style='border: none; border-top: 1px solid #232831; margin: 3rem 0 1.2rem 0;'>", unsafe_allow_html=True)
 st.markdown("""
-<div style="display:flex; justify-content:space-between; align-items:center; color:#747F8F; font-size:0.78rem;">
+<div style="display:flex; justify-content:space-between; align-items:center; color:#8A94A3; font-size:0.78rem;">
     <div>
         <strong style="color:#A6AFBD;">GamePulse</strong> · Gaming Retention Intelligence Platform · v1.0.0
     </div>
     <div>
-        CRISP-DM Framework · Scikit-Learn · Streamlit · Python 3.10+
+        CRISP-DM Framework · Scikit-Learn · Streamlit · Python 3.11+
     </div>
 </div>
 """, unsafe_allow_html=True)

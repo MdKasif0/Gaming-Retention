@@ -1,9 +1,15 @@
 # Core Dependencies for AI-Based Online Gaming Player Retention Prediction
-numpy>=1.24.0
-pandas>=2.0.0
-scikit-learn>=1.3.0
-joblib>=1.3.0
+# Requires Python 3.11+ (scikit-learn 1.9 / pandas 3 / numpy 2.4 minimums).
+#
+# scikit-learn is pinned exactly: models/gaming_retention_model.joblib was
+# pickled with 1.9.0 and pickles are not guaranteed to load across versions.
+# Retrain the model (notebooks/03_model_training_and_tuning.ipynb) before
+# changing this pin.
+scikit-learn==1.9.0
+joblib>=1.3.0,<2
+numpy>=2.0,<3
+pandas>=2.0.0,<4
 matplotlib>=3.7.0
 seaborn>=0.12.0
-streamlit>=1.30.0
+streamlit>=1.40.0,<2
 plotly>=5.18.0
