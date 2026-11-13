@@ -184,12 +184,15 @@ st.markdown("""
 
     /* Sidebar Workspace Navigation.
        Scoped to the sidebar's radio *options* only, so the main-page radios
-       (e.g. In-Game Purchases) and the collapsed widget label are untouched. */
+       (e.g. In-Game Purchases) and the collapsed widget label are untouched.
+       Selectors work whether Streamlit renders each option as a direct <label>
+       child of the radiogroup (older releases) or wraps it in a <div> (newer
+       releases, as on Streamlit Community Cloud). */
     section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] {
         gap: 0.35rem !important;
     }
 
-    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label {
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label {
         background: transparent !important;
         border: 1px solid transparent !important;
         border-radius: 8px !important;
@@ -201,29 +204,29 @@ st.markdown("""
         align-items: center !important;
     }
 
-    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:hover {
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label:hover {
         background: rgba(255, 255, 255, 0.04) !important;
         border-color: #2A3039 !important;
     }
 
-    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:has(input:checked) {
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label:has(input:checked) {
         background: rgba(255, 91, 85, 0.12) !important;
         border: 1px solid rgba(255, 91, 85, 0.4) !important;
         border-left: 3px solid #FF5B55 !important;
     }
 
-    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:has(input:checked) p {
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label:has(input:checked) p {
         color: #FFFFFF !important;
         font-weight: 600 !important;
     }
 
-    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:focus-within {
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label:focus-within {
         outline: 2px solid #7DD3FC;
         outline-offset: 2px;
     }
 
     /* Vector SVG Navigation Icons injected before radio option text */
-    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label p::before {
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label p::before {
         content: '';
         display: inline-block;
         width: 17px;
@@ -234,19 +237,19 @@ st.markdown("""
         background-repeat: no-repeat;
     }
 
-    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:nth-of-type(1) p::before {
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > :nth-child(1) p::before {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23FF5B55' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='6' y1='12' x2='10' y2='12'/%3E%3Cline x1='8' y1='10' x2='8' y2='14'/%3E%3Cline x1='15' y1='13' x2='15.01' y2='13'/%3E%3Cline x1='18' y1='11' x2='18.01' y2='11'/%3E%3Crect x='2' y='6' width='20' height='12' rx='6'/%3E%3C/svg%3E");
     }
 
-    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:nth-of-type(2) p::before {
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > :nth-child(2) p::before {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%237DD3FC' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='20' x2='18' y2='10'/%3E%3Cline x1='12' y1='20' x2='12' y2='4'/%3E%3Cline x1='6' y1='20' x2='6' y2='14'/%3E%3C/svg%3E");
     }
 
-    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:nth-of-type(3) p::before {
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > :nth-child(3) p::before {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23C7F36B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='4' width='16' height='16' rx='2'/%3E%3Crect x='9' y='9' width='6' height='6'/%3E%3Cline x1='9' y1='1' x2='9' y2='4'/%3E%3Cline x1='15' y1='1' x2='15' y2='4'/%3E%3Cline x1='9' y1='20' x2='9' y2='23'/%3E%3Cline x1='15' y1='20' x2='15' y2='23'/%3E%3Cline x1='20' y1='9' x2='23' y2='9'/%3E%3Cline x1='20' y1='14' x2='23' y2='14'/%3E%3Cline x1='1' y1='9' x2='4' y2='9'/%3E%3Cline x1='1' y1='14' x2='4' y2='14'/%3E%3C/svg%3E");
     }
 
-    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:nth-of-type(4) p::before {
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > :nth-child(4) p::before {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23F3C969' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/%3E%3Cpath d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/%3E%3C/svg%3E");
     }
 
@@ -734,7 +737,14 @@ def load_assets():
     if missing:
         return None, None, f"Missing model file(s): {', '.join(missing)}"
     try:
-        return joblib.load(MODEL_PATH), joblib.load(METADATA_PATH), None
+        pipe = joblib.load(MODEL_PATH)
+        # The forest was trained with n_jobs=-1. For single-player inference the
+        # thread start-up cost dominates (≈4x slower locally, far worse on shared
+        # cloud CPUs), so predict on one thread. Outputs are identical.
+        clf = getattr(pipe, "named_steps", {}).get("classifier")
+        if clf is not None and hasattr(clf, "n_jobs"):
+            clf.set_params(n_jobs=1)
+        return pipe, joblib.load(METADATA_PATH), None
     except Exception as exc:  # surface the real reason (e.g. scikit-learn version mismatch)
         return None, None, f"Could not load model: {type(exc).__name__}: {exc}"
 
@@ -1043,16 +1053,18 @@ with st.sidebar:
         "Methodology & Viva"
     ]
     
-    if "current_page" not in st.session_state:
+    if st.session_state.get("current_page") not in NAV_OPTIONS:
         st.session_state["current_page"] = "Player Simulator"
-        
-    selected_page = st.radio(
+
+    # Bound to session_state by key (no `index=`): a changing `index` gives the
+    # widget a new identity each time the page changes, so clicks could land on
+    # a stale widget and be ignored.
+    st.radio(
         "Workspace Navigation",
         NAV_OPTIONS,
-        index=NAV_OPTIONS.index(st.session_state["current_page"]),
+        key="current_page",
         label_visibility="collapsed"
     )
-    st.session_state["current_page"] = selected_page
 
     st.markdown('<div style="margin-top: 1.4rem;"></div>', unsafe_allow_html=True)
 
