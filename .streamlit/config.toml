@@ -6,3 +6,7 @@ headless = true
 port = 8501
 enableCORS = true
 enableXsrfProtection = true
+
+[client]
+# Hide the "Deploy" button / developer menu that overlaps the custom header.
+toolbarMode = "minimal"
