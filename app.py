@@ -249,9 +249,6 @@ st.markdown("""
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23C7F36B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='4' width='16' height='16' rx='2'/%3E%3Crect x='9' y='9' width='6' height='6'/%3E%3Cline x1='9' y1='1' x2='9' y2='4'/%3E%3Cline x1='15' y1='1' x2='15' y2='4'/%3E%3Cline x1='9' y1='20' x2='9' y2='23'/%3E%3Cline x1='15' y1='20' x2='15' y2='23'/%3E%3Cline x1='20' y1='9' x2='23' y2='9'/%3E%3Cline x1='20' y1='14' x2='23' y2='14'/%3E%3Cline x1='1' y1='9' x2='4' y2='9'/%3E%3Cline x1='1' y1='14' x2='4' y2='14'/%3E%3C/svg%3E");
     }
 
-    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > :nth-child(4) p::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23F3C969' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/%3E%3Cpath d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/%3E%3C/svg%3E");
-    }
 
     /* Sidebar Status Card */
     .gp-status-card {
@@ -1049,8 +1046,7 @@ with st.sidebar:
     NAV_OPTIONS = [
         "Player Simulator",
         "Analytics & Insights",
-        "Model Audit",
-        "Methodology & Viva"
+        "Model Audit"
     ]
     
     if st.session_state.get("current_page") not in NAV_OPTIONS:
@@ -1914,117 +1910,6 @@ elif st.session_state["current_page"] == "Model Audit":
             height=340
         )
         st.plotly_chart(fig_fi, **_stretch_kwargs(st.plotly_chart))
-
-# ==============================================================================
-# PAGE 4: METHODOLOGY & VIVA DEFENSE GUIDE
-# ==============================================================================
-elif st.session_state["current_page"] == "Methodology & Viva":
-    # Contextual Header
-    st.markdown(f"""
-    <div class="gp-page-header">
-        <div class="gp-title-area">
-            <div class="gp-icon-container">
-                {svg_icon('book', '#F3C969', 26)}
-            </div>
-            <div class="gp-title-text">
-                <h1>Methodology and Viva</h1>
-                <div class="gp-title-underline"></div>
-                <p class="gp-subtitle">Understand the project's decisions, assumptions, and limitations.</p>
-                <div class="gp-tagline">Academic formulation, proxy retention definitions, and viva defense answers.</div>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # Core Academic Methodology Cards
-    col_m1, col_m2 = st.columns(2)
-
-    with col_m1:
-        with st.expander("1. Problem Statement & LiveOps Business Context", expanded=True):
-            st.markdown("""
-            Modern video games generate high-velocity telemetry streams capturing session durations, login frequencies, and in-game achievements.
-            However, raw telemetry alone cannot alert community managers to imminent player drop-off until the player has already abandoned the title.
-            
-            Acquiring a new gamer costs up to **5× to 7× more** than retaining an existing player. GamePulse provides an interpretable machine learning framework to intercept disengaged players *before* they permanently churn.
-            """)
-
-        with st.expander("2. Dataset & Telemetry Specification", expanded=True):
-            st.markdown("""
-            The system is built upon the **Online Gaming Behavior Dataset**:
-
-            - **Instances:** `40,034` player records.
-            - **Attributes:** `13` columns (1 unique identifier, 11 behavioral/demographic inputs, 1 engagement tier).
-            - **Data Integrity:** `0` missing values, `0` duplicate rows.
-            - **Source File:** `data/online_gaming_behavior_dataset.csv`.
-            """)
-
-        with st.expander("3. Operational Retention Proxy Formulation", expanded=True):
-            st.markdown("""
-            The benchmark dataset contains cross-sectional player telemetry without longitudinal timestamps (e.g. Day-30 churn). We establish an operational proxy:
-            
-            $$\\text{RetentionStatus} = \\begin{cases} \\text{Retained}, & \\text{if } \\text{EngagementLevel} \\in \\{\\text{'Medium'}, \\text{'High'}\\} \\\\ \\text{At Risk}, & \\text{if } \\text{EngagementLevel} = \\text{'Low'} \\end{cases}$$
-            
-            $$\\text{RetentionTarget} = \\begin{cases} 1 \\text{ (Retained)}, & 74.21\\% \\\\ 0 \\text{ (At Risk)}, & 25.79\\% \\end{cases}$$
-            """)
-
-    with col_m2:
-        with st.expander("4. Model Selection Justification (Why Random Forest?)", expanded=True):
-            st.markdown("""
-            - **Nonlinear Relationships:** Player churn involves complex nonlinear thresholds (e.g., playtime × difficulty interactions). Random Forest naturally captures high-order interactions without manual polynomial expansion.
-            - **Scale Invariance:** Decision trees split along single-feature thresholds; omitting feature scalers preserves direct physical interpretability (hours, logins, minutes).
-            - **Class Imbalance Resilience:** `class_weight='balanced'` assigns penalty weights inversely proportional to class frequencies, preventing the 74.2% majority retained class from overwhelming the at-risk minority class.
-            """)
-
-        with st.expander("5. Evaluation Philosophy (Why F1-Score over Accuracy?)", expanded=True):
-            st.markdown("""
-            In retention modeling, raw accuracy is deceptive. A trivial model predicting 100% of players as 'Retained' achieves 74.2% accuracy while having a **0% catch rate for churn**. Optimizing for **F1-score** balances precision and recall, ensuring our model achieves a **90.12% recall on at-risk players**.
-            """)
-
-        with st.expander("6. Limitations & Future Technical Roadmap", expanded=True):
-            st.markdown("""
-            - **Longitudinal Time-Series:** Incorporate rolling window telemetry (login velocity over 7, 14, 30 days) to model prospective churn trajectory.
-            - **Survival Analysis:** Implement Cox Proportional Hazards to model *time-to-churn* hazard rates.
-            - **Real-Time SHAP:** Integrate TreeSHAP into the dashboard to generate individualized waterfall plots for each specific player input.
-            """)
-
-    # Technical Viva Defense / Judge Q&A Accordion
-    st.markdown("---")
-    st.markdown(f"### <span style='display:inline-flex; align-items:center; gap:0.55rem;'>{svg_icon('graduation', '#62D6A5', 22)} Technical Viva Defense & Judge Questions</span>", unsafe_allow_html=True)
-
-    q1, q2 = st.columns(2)
-
-    with q1:
-        with st.expander("Q: Why is PlayerID strictly excluded from training?"):
-            st.markdown("""
-            `PlayerID` is an arbitrary sequential database primary key. Including it would cause fatal target memorization (spurious correlation) rather than generalizable behavioral pattern discovery.
-            """)
-
-        with st.expander("Q: Why is this an 'Operational Proxy' and NOT true churn?"):
-            st.markdown("""
-            True churn requires longitudinal observation windows $[t_0, t_1]$ and outcome windows $[t_1, t_2]$ (e.g., 0 logins for 30 consecutive days). The dataset is cross-sectional; mapping Low engagement as At Risk is a scientifically valid proxy that must be explicitly acknowledged during academic examination.
-            """)
-
-        with st.expander("Q: How does ColumnTransformer fitted strictly on X_train prevent leakage?"):
-            st.markdown("""
-            Fitting transformers on the entire dataset leaks global statistical properties (median, category frequencies) from test samples into training folds, falsely inflating cross-validation scores. Strict split-fitting guarantees genuine generalization estimates.
-            """)
-
-    with q2:
-        with st.expander("Q: What is the financial cost trade-off of False Positives vs. False Negatives?"):
-            st.markdown("""
-            - **False Negative (At-Risk misclassified as Retained):** High cost — the player may leave silently, forfeiting customer lifetime value (LTV ≈ \\$50).
-            - **False Positive (Retained misclassified as At-Risk):** Low cost — an active player merely receives a re-engagement notification or free login gift (under \\$0.20).
-            """)
-
-        with st.expander("Q: Why did hyperparameter tuning select max_features=None?"):
-            st.markdown("""
-            With only 11 conceptual features (21 encoded), allowing trees to evaluate all available splits at each decision node maximizes discriminability between subtle login frequency thresholds.
-            """)
-
-        with st.expander("Q: How do you prevent overfitting with deep decision trees?"):
-            st.markdown("""
-            Overfitting is constrained by `min_samples_leaf=2` (requiring at least 2 samples per terminal node) and `min_samples_split=5`, preventing individual trees from memorizing single-player telemetry anomalies.
-            """)
 
 # ==============================================================================
 # 7. GLOBAL APPLICATION FOOTER

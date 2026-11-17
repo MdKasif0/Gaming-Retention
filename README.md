@@ -30,7 +30,7 @@ GamePulse is an end-to-end Machine Learning intelligence platform for video game
 8. [Feature Importance & Behavioral Drivers](#-feature-importance--behavioral-drivers)
 9. [Web Application Architecture (GamePulse)](#-web-application-architecture-gamepulse)
 10. [How to Run Locally](#-how-to-run-locally)
-11. [Limitations & Viva Defense Guide](#-limitations--viva-defense-guide)
+11. [Limitations](#-limitations)
 
 ---
 
@@ -175,20 +175,20 @@ Aggregating one-hot dummy levels back into conceptual domain features reveals th
 
 ## 💻 Web Application Architecture (GamePulse)
 
-GamePulse (`app.py`) is organized into **4 specialized workspaces**:
+GamePulse (`app.py`) is organized into **3 specialized workspaces**:
 
 ```
 GamePulse Platform
  ├── Refined Sidebar:
  │    ├── Brand Identity (Waveform Pulse Logo + Wordmark)
- │    ├── Workspace Navigation (Radio: Simulator, Analytics, Audit, Viva)
+ │    ├── Workspace Navigation (Radio: Simulator, Analytics, Audit)
  │    ├── Player Presets (Veteran, Disengaged, Threshold, Custom)
  │    ├── Live Health Status Card (Tree count, F1-score, ROC-AUC, Measured Latency)
  │    └── Academic Attribution Footer
  ├── Global Header Bar:
  │    ├── Breadcrumbs (Workspace / Active Page)
  │    └── Model Status Badge (● Model loaded)
- └── 4 Dedicated Workspaces:
+ └── 3 Dedicated Workspaces:
       ├── 1. Player Simulator:
       │    ├── 3 Balanced Input Panels (Profile, Play Behavior, Progression)
       │    ├── Coral CTA ("Analyze Player Engagement")
@@ -203,15 +203,12 @@ GamePulse Platform
       │    ├── Interactive Plotly Bar Charts (Weekly Frequency & Durations)
       │    ├── Interactive Correlation Heatmap Matrix
       │    └── Data-Grounded Observation Cards
-      ├── 3. Model Architecture & Audit:
-      │    ├── Pipeline Architecture & Scikit-Learn Code
-      │    ├── Visual Pipeline Flowchart
-      │    ├── Holdout Evaluation Scorecard ($N = 8,007$)
-      │    ├── Interactive Confusion Matrix Heatmap
-      │    └── Aggregated Feature Importance Bar Chart
-      └── 4. Methodology & Viva Defense:
-           ├── Structured Technical Knowledge Base
-           └── Interactive Judge / Viva Defense Q&A Accordion
+      └── 3. Model Architecture & Audit:
+           ├── Pipeline Architecture & Scikit-Learn Code
+           ├── Visual Pipeline Flowchart
+           ├── Holdout Evaluation Scorecard ($N = 8,007$)
+           ├── Interactive Confusion Matrix Heatmap
+           └── Aggregated Feature Importance Bar Chart
 ```
 
 ---
@@ -246,7 +243,7 @@ jupyter notebook gaming_retention.ipynb
 
 ---
 
-## ⚠️ Limitations & Viva Defense Guide
+## ⚠️ Limitations
 
 1. **Operational Proxy Notice:** `EngagementLevel` serves as a proxy for player retention; it is not a direct longitudinal measurement of prospective churn (e.g., Day-30 login absence).
 2. **Cross-Sectional Telemetry:** Data represents a concurrent static snapshot without temporal lag between predictors and outcomes.
